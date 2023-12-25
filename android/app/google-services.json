@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "938925896204",
+    "project_id": "class-17dde",
+    "storage_bucket": "class-17dde.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:938925896204:android:0c9c3325d1b7fbdde67429",
+        "android_client_info": {
+          "package_name": "com.example.classchat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDglKs05oTWCWi_dJhDJmIjwkI4mGsgosk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
