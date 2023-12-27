@@ -56,7 +56,7 @@ class _RegisterClasses extends State<RegisterClasses> {
                     }
                     return DropdownButton(
                       hint: const Text(
-                        "Select Class",
+                        "Select Classes",
                         style: TextStyle(
                           color: Colors.black,
                         ),
@@ -164,7 +164,6 @@ class _RegisterClasses extends State<RegisterClasses> {
                     .doc(currentUser.email)
                     .update({
                   'classRegistered': true,
-                  'name': currentUser.email!.split('@')[0],
                 });
                 Navigator.push(
                   context,
