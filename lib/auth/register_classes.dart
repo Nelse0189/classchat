@@ -1,3 +1,4 @@
+import 'package:classchat/main.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,10 +12,13 @@ class RegisterClasses extends StatefulWidget {
 }
 
 class _RegisterClasses extends State<RegisterClasses> {
-  final currentUser = FirebaseAuth.instance.currentUser!; // Replace with actual UID
-  String? selectedClassId;
+  final currentUser = FirebaseAuth.instance
+      .currentUser!; // Replace with actual UID
+  String? selectedClassId = 'Select Classes';
   bool isSubcategoriesExpanded = false;
   List<Widget> subcategoryButtons = [];
+  List<DropdownMenuItem> classList = [];
+  int docCount = 0;
 
 
   @override
@@ -24,72 +28,159 @@ class _RegisterClasses extends State<RegisterClasses> {
       appBar: AppBar(
         title: const Text('Classes'),
       ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('Users')
-            .doc(currentUser.email) // Replace with current user's UID
-            .collection('classes')
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            return Column(
-              children: [
-                // DropdownButton for selecting the class
-                DropdownButton<String>(
-                  value: selectedClassId,
-                  onChanged: (newClassId) async {
-                    setState(() {
-                      selectedClassId = newClassId;
-                      isSubcategoriesExpanded = true;
-                    });
-
-                    // Fetch subcategories (assuming they're within the selected class document)
-                    final subcategoriesSnapshot = await FirebaseFirestore.instance
-                        .collection('Users')
-                        .doc(currentUser.toString())
-                        .collection('classes')
-                        .doc(newClassId)
-                        .collection('subcategories') // Assuming subcategories are in a nested subcollection
-                        .get();
-
-                    subcategoryButtons = subcategoriesSnapshot.docs
-                        .map((subcategory) => TextButton(
-                      onPressed: () async {
-                        await FirebaseFirestore.instance
-                            .collection('Users')
-                            .doc(currentUser.toString())
-                            .collection('classes')
-                            .doc(newClassId)
-                            .collection('subcategories')
-                            .doc(subcategory.id)
-                            .update({'isSelected': !subcategory['isSelected']});
-                      },
-                      child: Text(subcategory['name']),
-                    ))
-                        .toList();
-                  },
-                  items: snapshot.data!.docs.map((classDoc) {
-                    return DropdownMenuItem<String>(
-                      value: classDoc.id,
-                      child: Text(classDoc.id), // Use ID as text for clarity
+      body: Center(
+        child: Column(
+          children: [
+            Expanded(
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("Classes")
+                    .orderBy("Name")
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
                     );
-                  }).toList(),
-                ),
-
-                // Expanded list of subcategory buttons (conditionally displayed)
-                if (isSubcategoriesExpanded)
-                  Expanded(
-                    child: ListView(
+                  } else {
+                    List<DropdownMenuItem> classList = [];
+                    for (int i = 0; i < snapshot.data!.docs.length; i++) {
+                      DocumentSnapshot snap = snapshot.data!.docs[i];
+                      classList.add(DropdownMenuItem(
+                        child: Text(
+                          snap['Name'],
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                        value: "${snap.id}",
+                      ));
+                    }
+                    return DropdownButton(
+                      hint: const Text(
+                        "Select Class",
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                      dropdownColor: Colors.white,
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                      value: selectedClassId,
+                      items: classList,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedClassId = value.toString();
+                        });
+                      },
+                    );
+                  }
+                },
+              ),
+            ),
+            Expanded(
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("Classes")
+                    .doc(selectedClassId)
+                    .collection("subclasses")
+                    .orderBy("name")
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    List<Widget> subcategoryButtons = [];
+                    for (int i = 0; i < snapshot.data!.docs.length; i++) {
+                      DocumentSnapshot snap = snapshot.data!.docs[i];
+                      subcategoryButtons.add(
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              isSubcategoriesExpanded = true;
+                            });
+                          },
+                          child: Text(
+                            snap['name'],
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      );
+                    }
+                    return GridView.count(
+                      crossAxisCount: 2,
                       children: subcategoryButtons,
-                    ),
-                  ),
-              ],
-            );
-          }
-        },
+                    );
+                  }
+                },
+              ),
+            ),
+            Expanded(
+              child: StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("Classes")
+                    .doc(selectedClassId)
+                    .collection("Subclasses")
+                    .orderBy("name")
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else {
+                    List<Widget> subcategoryButtons = [];
+                    for (int i = 0; i < snapshot.data!.docs.length; i++) {
+                      DocumentSnapshot snap = snapshot.data!.docs[i];
+                      subcategoryButtons.add(
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              isSubcategoriesExpanded = true;
+                            });
+                          },
+                          child: Text(
+                            snap['name'],
+                            style: const TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      );
+                    }
+                    return GridView.count(
+                      crossAxisCount: 2,
+                      children: subcategoryButtons,
+                    );
+                  }
+                },
+
+              ),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                FirebaseFirestore.instance
+                    .collection('Users')
+                    .doc(currentUser.email)
+                    .update({
+                  'classRegistered': true,
+                  'name': currentUser.email!.split('@')[0],
+                });
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyHomePage(title: 'ClassChat',)),
+                );
+              },
+              child: const Text('Submit'),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
+
+
+
+
+
