@@ -1,8 +1,8 @@
 import 'package:classchat/main.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/physics.dart';
 
 class RegisterClasses extends StatefulWidget {
   const RegisterClasses({Key? key}) : super(key: key);
@@ -19,6 +19,7 @@ class _RegisterClasses extends State<RegisterClasses> {
   List<Widget> subcategoryButtons = [];
   List<DropdownMenuItem> classList = [];
   int docCount = 0;
+  List<String> registeredClasses= [];
 
 
   @override
@@ -100,10 +101,18 @@ class _RegisterClasses extends State<RegisterClasses> {
                             setState(() {
                               isSubcategoriesExpanded = true;
                             });
+                            if(registeredClasses.contains(snap['name'].toString())) {
+                              // Remove from registeredClasses
+                              registeredClasses.remove(snap['name'].toString());
+                            } else {
+                              // Add to registeredClasses
+                              registeredClasses.add(snap['name'].toString());
+                            }
+                            print (registeredClasses);
                           },
                           child: Text(
                             snap['name'],
-                            style: const TextStyle(color: Colors.black),
+                            style: const TextStyle(color: Colors.white),
                           ),
                         ),
                       );
@@ -114,46 +123,6 @@ class _RegisterClasses extends State<RegisterClasses> {
                     );
                   }
                 },
-              ),
-            ),
-            Expanded(
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection("Classes")
-                    .doc(selectedClassId)
-                    .collection("Subclasses")
-                    .orderBy("name")
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    List<Widget> subcategoryButtons = [];
-                    for (int i = 0; i < snapshot.data!.docs.length; i++) {
-                      DocumentSnapshot snap = snapshot.data!.docs[i];
-                      subcategoryButtons.add(
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              isSubcategoriesExpanded = true;
-                            });
-                          },
-                          child: Text(
-                            snap['name'],
-                            style: const TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      );
-                    }
-                    return GridView.count(
-                      crossAxisCount: 2,
-                      children: subcategoryButtons,
-                    );
-                  }
-                },
-
               ),
             ),
 
