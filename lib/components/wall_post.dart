@@ -3,6 +3,7 @@ import 'package:classchat/components/like_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:classchat/auth/constants.dart';
 
 class WallPost extends StatefulWidget {
   final String message;
@@ -64,7 +65,7 @@ class _WallPostState extends State<WallPost> {
             //confirm button
             TextButton(
                 onPressed: () async {
-                  FirebaseFirestore.instance.collection('User Posts').doc(widget.postId).delete();
+                  FirebaseFirestore.instance.collection('User Posts' + currentClass + dmID).doc(widget.postId).delete();
                   Navigator.pop(context);
                 },
                 child: const Text('Delete'))

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:classchat/auth/auth.dart';
 import 'package:classchat/components/wall_post.dart';
 import 'package:classchat/text_field.dart';
@@ -5,15 +7,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'auth/constants.dart';
+import 'class_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
+
+
 class _HomePageState extends State<HomePage> {
+
+  @override
+  void initState() {
+    super.initState();
+    generateDMID(FirebaseAuth.instance.currentUser!.email!);
+  }
 
   final currentUser = FirebaseAuth.instance.currentUser!;
   final textController = TextEditingController();
@@ -26,7 +40,8 @@ class _HomePageState extends State<HomePage> {
   void postMessage(){
     if (textController.text.isNotEmpty){
       //store in firebase
-      FirebaseFirestore.instance.collection("User Posts").add({
+      generateDMID(FirebaseAuth.instance.currentUser!.email!);
+      FirebaseFirestore.instance.collection("User Posts" + currentClass + dmID).add({
         'UserEmail' : currentUser.email,
         "Message" : textController.text,
         'TimeStamp' : Timestamp.now(),
@@ -58,7 +73,7 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
-                    .collection("User Posts")
+                    .collection("User Posts" + currentClass + dmID)
                     .orderBy(
                       "TimeStamp",
                       descending: false,

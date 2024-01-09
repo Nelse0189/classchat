@@ -10,6 +10,7 @@ import 'profile_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter/services.dart';
+import 'class_page.dart';
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.blue,
@@ -51,11 +52,12 @@ class MyApp extends StatelessWidget {
           // tested with just a hot reload.
 
           colorScheme:
-              ColorScheme.fromSeed(seedColor: Colors.redAccent.shade700),
+              ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent.shade400),
           useMaterial3: false,
         ),
         home: AnimatedSplashScreen(
-          splash: Icons.home,
+          splash: Image.asset('images/owl.png'),
+          splashIconSize: 200,
           duration: 1500,
           splashTransition: SplashTransition.fadeTransition,
           backgroundColor: Colors.red,
@@ -86,7 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
-    HomePage(),
+    ClassPage(),
     SearchPage(),
     ProfilePage(),
   ];

@@ -21,6 +21,21 @@ class _RegisterClasses extends State<RegisterClasses> {
   int docCount = 0;
   List<String> registeredClasses= [];
 
+  @override
+  initState() {
+    super.initState();
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc(currentUser.email)
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        setState(() {
+          registeredClasses = documentSnapshot['Registered Classes'].cast<String>();
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,118 +45,135 @@ class _RegisterClasses extends State<RegisterClasses> {
         title: const Text('Classes'),
       ),
       body: Center(
-        child: Column(
-          children: [
-            Expanded(
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection("Classes")
-                    .orderBy("Name")
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    List<DropdownMenuItem> classList = [];
-                    for (int i = 0; i < snapshot.data!.docs.length; i++) {
-                      DocumentSnapshot snap = snapshot.data!.docs[i];
-                      classList.add(DropdownMenuItem(
-                        child: Text(
-                          snap['Name'],
-                          style: const TextStyle(color: Colors.black),
-                        ),
-                        value: "${snap.id}",
-                      ));
-                    }
-                    return DropdownButton(
-                      hint: const Text(
-                        "Select Classes",
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                      ),
-                      dropdownColor: Colors.white,
-                      style: const TextStyle(
-                        color: Colors.black,
-                      ),
-                      value: selectedClassId,
-                      items: classList,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedClassId = value.toString();
-                        });
-                      },
-                    );
-                  }
-                },
-              ),
-            ),
-            Expanded(
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection("Classes")
-                    .doc(selectedClassId)
-                    .collection("subclasses")
-                    .orderBy("name")
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else {
-                    List<Widget> subcategoryButtons = [];
-                    for (int i = 0; i < snapshot.data!.docs.length; i++) {
-                      DocumentSnapshot snap = snapshot.data!.docs[i];
-                      subcategoryButtons.add(
-                        ElevatedButton(
-                          onPressed: () {
-                            setState(() {
-                              isSubcategoriesExpanded = true;
-                            });
-                            if(registeredClasses.contains(snap['name'].toString())) {
-                              // Remove from registeredClasses
-                              registeredClasses.remove(snap['name'].toString());
-                            } else {
-                              // Add to registeredClasses
-                              registeredClasses.add(snap['name'].toString());
-                            }
-                            print (registeredClasses);
-                          },
-                          child: Text(
-                            snap['name'],
-                            style: const TextStyle(color: Colors.white),
+        child: Expanded(
+          child: Column(
+            children: [
+              Flexible(
+                flex: 1,
+                child: SizedBox(
+                  height: 70,
+                  child: StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection("Classes")
+                        .orderBy("Name")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        List<DropdownMenuItem> classList = [];
+                        for (int i = 0; i < snapshot.data!.docs.length; i++) {
+                          DocumentSnapshot snap = snapshot.data!.docs[i];
+                          classList.add(DropdownMenuItem(
+                            child: Text(
+                              snap['Name'],
+                              style: const TextStyle(color: Colors.black),
+                            ),
+                            value: "${snap.id}",
+                          ));
+                        }
+                        return DropdownButton(
+                          hint: const Text(
+                            "Select Classes",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
                           ),
-                        ),
-                      );
-                    }
-                    return GridView.count(
-                      crossAxisCount: 2,
-                      children: subcategoryButtons,
-                    );
-                  }
-                },
+                          iconSize: 30.0,
+                          itemHeight: 60.0,
+                          menuMaxHeight: 500.0,
+                          borderRadius: BorderRadius.circular(20.0),
+                          dropdownColor: Colors.white,
+                          style: const TextStyle(
+                            color: Colors.black,
+                          ),
+                          value: selectedClassId,
+                          items: classList,
+                          onChanged: (value) {
+                            setState(() {
+                              selectedClassId = value.toString();
+                            });
+                          },
+                        );
+                      }
+                    },
+                  ),
+                ),
               ),
-            ),
-
-            ElevatedButton(
-              onPressed: () {
-                FirebaseFirestore.instance
-                    .collection('Users')
-                    .doc(currentUser.email)
-                    .update({
-                  'classRegistered': true,
-                });
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MyHomePage(title: 'ClassChat',)),
-                );
-              },
-              child: const Text('Submit'),
-            ),
-          ],
+              Flexible(
+                flex: 9,
+                child: Expanded(
+                  child: StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection("Classes")
+                        .doc(selectedClassId)
+                        .collection("subclasses")
+                        .orderBy("name")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        List<Widget> subcategoryButtons = [];
+                        for (int i = 0; i < snapshot.data!.docs.length; i++) {
+                          DocumentSnapshot snap = snapshot.data!.docs[i];
+                          subcategoryButtons.add(
+                            ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  isSubcategoriesExpanded = true;
+                                });
+                                if(registeredClasses.contains(snap['name'].toString())) {
+                                  // Remove from registeredClasses
+                                  registeredClasses.remove(snap['name'].toString());
+                                } else {
+                                  // Add to registeredClasses
+                                  registeredClasses.add(snap['name'].toString());
+                                }
+                                print (registeredClasses);
+                              },
+                              child: Text(
+                                snap['name'],
+                                style: const TextStyle(color: Colors.white),
+                              ),
+                              style: ElevatedButton.styleFrom(primary: Colors.blue)),
+                          );
+                        }
+                        return GridView.count(
+                          crossAxisCount: 3,
+                          children: subcategoryButtons,
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ),
+          
+              ElevatedButton(
+                onPressed: () {
+                  FirebaseFirestore.instance
+                      .collection('Users')
+                      .doc(currentUser.email)
+                      .update({
+                    'classRegistered': true,
+                  });
+                  FirebaseFirestore.instance
+                      .collection('Users')
+                      .doc(currentUser.email)
+                      .update({'Registered Classes': registeredClasses});
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MyHomePage(title: 'ClassChat',)),
+                  );
+                },
+                child: const Text('Submit'),
+              ),
+            ],
+          ),
         ),
       ),
     );
