@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:classchat/auth/auth.dart';
 import 'package:classchat/components/wall_post.dart';
+import 'package:classchat/main.dart';
 import 'package:classchat/text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'auth/constants.dart';
 import 'class_page.dart';
+import 'search_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,6 +24,7 @@ class HomePage extends StatefulWidget {
 
 
 class _HomePageState extends State<HomePage> {
+
 
   @override
   void initState() {
@@ -42,6 +45,8 @@ class _HomePageState extends State<HomePage> {
       //store in firebase
       generateDMID(FirebaseAuth.instance.currentUser!.email!);
       FirebaseFirestore.instance.collection("User Posts" + currentClass + dmID).add({
+        'currentUserName' : currentUser.displayName,
+        'imgUrl' : currentUser.email,
         'UserEmail' : currentUser.email,
         "Message" : textController.text,
         'TimeStamp' : Timestamp.now(),
@@ -61,6 +66,14 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('ClassChat'),
         centerTitle: true,
+        leading: BackButton(
+          onPressed: () {
+            nullifyDMID();
+            nullifySelectedUser();
+            nullifyCurrentClass();
+            Navigator.push(context,MaterialPageRoute(builder: (context) => MyHomePage(title: 'ClassChat'),),);
+          },
+        ),
         actions: [
           IconButton(
               onPressed: signOut,
@@ -87,8 +100,10 @@ class _HomePageState extends State<HomePage> {
                         itemBuilder: (context,index) {
                           final post = snapshot.data!.docs[index];
                           return WallPost(
+                            currentUserName: post['currentUserName'],
+                            userEmail: post['UserEmail'],
                             message: post['Message'],
-                            user: post['UserEmail'],
+                            imgUrl: post['imgUrl'],
                             postId: post.id,
                             likes: List<String>.from(post['Likes'] ?? []),
                           );

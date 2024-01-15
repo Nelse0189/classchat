@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
         return AnnotatedRegion<SystemUiOverlayStyle>(
         value: SystemUiOverlayStyle(
-        statusBarColor: Colors.blue,
+        statusBarColor: Colors.transparent,
         ),
         child: MaterialApp(
         title: 'ClassChat',
@@ -52,15 +52,15 @@ class MyApp extends StatelessWidget {
           // tested with just a hot reload.
 
           colorScheme:
-              ColorScheme.fromSeed(seedColor: Colors.deepOrangeAccent.shade400),
+              ColorScheme.fromSeed(seedColor: Colors.amber, brightness: Brightness.dark),
           useMaterial3: false,
         ),
         home: AnimatedSplashScreen(
-          splash: Image.asset('images/owl.png'),
+          splash: Image.asset('images/owl2.png'),
           splashIconSize: 200,
           duration: 1500,
           splashTransition: SplashTransition.fadeTransition,
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.blue,
           nextScreen: AuthPage(),
         ),),);
   }

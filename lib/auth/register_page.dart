@@ -49,12 +49,7 @@ class _RegisterPageState extends State<RegisterPage> {
           .collection('Users')
           .doc(userCredential.user!.email)
           .collection('classes');
-      DocumentReference subCollectionReference = classesCollection.doc('Art');
-      // Add a sample class document with default values
-      classesCollection.add({
-        'name': 'Art1000',
-        'isSelected': false,
-      });
+      FirebaseAuth.instance.currentUser!.updateDisplayName(emailTextController.text.split('@')[0]);
 
       if(context.mounted) Navigator.push(context, MaterialPageRoute(builder: (context) => AuthPage(),),);;
     } on FirebaseAuthException catch (e) {

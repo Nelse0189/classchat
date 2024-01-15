@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-
+import 'resources/add_data.dart';
 import 'package:classchat/text_box.dart';
 import 'package:classchat/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'settings.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -17,9 +19,52 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   //user
+  bool isLoading = true;
   final currentUser = FirebaseAuth.instance.currentUser!;
   final userCollections = FirebaseFirestore.instance.collection('Users');
   Uint8List? _image;
+  late String imageUrl = '';
+  final storage = FirebaseStorage.instance;
+
+  void initState() {
+    super.initState();
+    getImageUrl();
+    currentUser.reload();
+  }
+
+  Future<void> getImageUrl () async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      final ref = storage.ref().child(currentUser.email!);
+      final url = await ref.getDownloadURL();
+      setState(() {
+        imageUrl = url;
+        isLoading = false; // End loading
+      });
+    } catch (e) {
+      print("Error fetching image URL: $e");
+      setState(() {
+        isLoading = false; // End loading even if there's an error
+      });
+    }
+    print(imageUrl) ;
+  }
+
+  void saveProfile() async {
+    //save profile
+    setState(() {
+      isLoading = true;
+    });
+
+    String resp = await StoreData().saveData(
+        file: _image!
+    );
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   Future<void> editField(String field) async {
     String newValue = "";
@@ -29,11 +74,11 @@ class _ProfilePageState extends State<ProfilePage> {
           backgroundColor: Colors.grey[900],
           title: Text(
             "Edit "+ field,
-            style: const TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.amber),
           ),
           content: TextField(
           autofocus: true,
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.amber),
           decoration: InputDecoration(
             hintText: "Enter New" + field,
             hintStyle: TextStyle(color: Colors.grey),
@@ -47,11 +92,11 @@ class _ProfilePageState extends State<ProfilePage> {
             //cancel button
             TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text('Cancel', style: TextStyle(color: Colors.white),),),
+                child: Text('Cancel', style: TextStyle(color: Colors.amber),),),
             //save button
             TextButton(
                 onPressed: () => Navigator.of(context).pop(newValue),
-                child: Text('Save', style: TextStyle(color: Colors.white),),),
+                child: Text('Save', style: TextStyle(color: Colors.amber),),),
           ],
         ),
     );
@@ -60,11 +105,21 @@ class _ProfilePageState extends State<ProfilePage> {
       //only update if there is a new value
       await userCollections.doc(currentUser.email).update({field: newValue});
     }
+    FirebaseAuth.instance.currentUser!.updateDisplayName(newValue);
   }
   void selectImage () async {
-    Uint8List img = await pickImage(ImageSource.gallery);
     setState(() {
-      _image = img;
+      isLoading = true;
+    });
+    Uint8List img = await pickImage(ImageSource.gallery);
+    if(img != null){
+      setState(() {
+        _image = img;
+      });
+      saveProfile();
+    }
+    setState(() {
+      isLoading = false;
     });
   }
 
@@ -84,18 +139,24 @@ class _ProfilePageState extends State<ProfilePage> {
                   alignment: Alignment.center,
                   children: [
                 const SizedBox(height: 50,),
-                _image != null ? CircleAvatar(
-                  radius: 64,
-                  backgroundImage: MemoryImage(_image!),
-                ) :
-                CircleAvatar(
-                  radius: 64,
-                  backgroundImage: NetworkImage('https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    isLoading ?
+                      const CircularProgressIndicator() :
+                    CircleAvatar(
+                      key : UniqueKey(),
+                      radius: 64,
+                      backgroundImage: imageUrl.isNotEmpty
+                        ? NetworkImage(imageUrl + '?v=${UniqueKey().toString()}')
+                        : NetworkImage('https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'),
+                  ),
+                  ],
                 ),
                   Positioned(
                     child: IconButton
                     (onPressed: selectImage,
-                    icon: Icon(Icons.add_a_photo),
+                    icon: Icon(Icons.add_a_photo, color: Colors.blueGrey, size: 30,),
                   ),
                   bottom: -10,
                   right: 130
@@ -103,12 +164,12 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
           ],
                 ),
-                const SizedBox(height: 10,),
+                const SizedBox(height: 20,),
 
                 Text(
                   currentUser.email!,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.orange, fontFamily: 'Roboto'),
+                  style: TextStyle(color: Colors.lightBlueAccent, fontFamily: 'Roboto', fontWeight: FontWeight.bold, fontSize: 16),
                 ),
 
                 const SizedBox(height: 50,),
@@ -117,14 +178,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   padding: const EdgeInsets.only(left:25),
                   child: Text(
                     'My Details',
-                    style: TextStyle(color: Colors.redAccent),
+                    style: TextStyle(color: Colors.lightBlueAccent, fontFamily: 'Roboto', fontWeight: FontWeight.bold, fontSize: 14),
                   ),
                 ),
                 //username
                 MyTextBox(
                   text: userData ['username'],
                   sectionName: "username",
-                  onPressed: () => editField('username') ,
+                  onPressed: () => editField('username'),
                 ),
                 MyTextBox(
                   text: userData ['bio'],
@@ -140,7 +201,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     onPressed: () => Navigator.pop(context),
                     child: Text('Settings'),
                   ),
-                )
+                ),
+                const SizedBox(height: 20,),
+
 
               ],
             );

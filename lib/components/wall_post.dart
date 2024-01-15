@@ -2,19 +2,24 @@ import 'package:classchat/components/delete_button.dart';
 import 'package:classchat/components/like_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:classchat/auth/constants.dart';
 
 class WallPost extends StatefulWidget {
+  final String userEmail;
   final String message;
-  final String user;
+  final String imgUrl;
+  final String currentUserName;
   //final String time;
   final String postId;
   final List<String> likes;
   const WallPost({
     super.key,
+    required this.imgUrl,
+    required this.userEmail,
     required this.message,
-    required this.user,
+    required this.currentUserName,
     required this.postId,
     required this.likes,
     //required this.time,
@@ -25,14 +30,28 @@ class WallPost extends StatefulWidget {
 }
 
 class _WallPostState extends State<WallPost> {
-  final currentUser = FirebaseAuth.instance.currentUser!;
+  final userEmail = FirebaseAuth.instance.currentUser!;
+  final currentUserName = FirebaseFirestore.instance.collection('Users').doc(currentEmail).get().then((value) => value['username']);
   bool isLiked = false;
+  final storage = FirebaseStorage.instance;
+  late String imageUrl = '';
+  //String currentUsername = FirebaseAuth.instance.currentUser!.email!;
+
+
+  Future<void> getImageUrl () async {
+    final ref = storage.ref().child(widget.imgUrl);
+    final url = await ref.getDownloadURL();
+    setState(() {
+      imageUrl = url;
+    });
+  }
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    isLiked =  widget.likes.contains(currentUser.email);
+    getImageUrl();
+    isLiked =  widget.likes.contains(currentEmail);
   }
 
   void toggleLike(){
@@ -43,13 +62,14 @@ class _WallPostState extends State<WallPost> {
 
     if (isLiked) {
       postRef.update({
-        'Likes' : FieldValue.arrayUnion([currentUser.email])
+        'Likes' : FieldValue.arrayUnion([currentEmail])
       });
     } else{
       postRef.update({
-        'Likes' : FieldValue.arrayRemove([currentUser.email])
+        'Likes' : FieldValue.arrayRemove([currentEmail])
       });
     }
+    print(currentUser!.displayName!)  ;
   }
   //delete post
   void deletePost() {
@@ -73,12 +93,21 @@ class _WallPostState extends State<WallPost> {
         ),);
   }
 
+  String getUserId() {
+    String currentUsername = '';
+    FirebaseFirestore.instance.collection('Users').doc(currentEmail).get().then((value) {
+      currentUsername = value['username'];
+    });
+    print(currentUsername)  ;
+    return currentUsername;
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Colors.amber,
         borderRadius: BorderRadius.circular(8),
       ),
       margin: EdgeInsets.only(top: 25, left: 25, right: 25),
@@ -86,20 +115,21 @@ class _WallPostState extends State<WallPost> {
       child: Row(
         children: [
           //profile pic
-          //Container(
-            //decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.red[400]),
-            //padding: EdgeInsets.all(10),
-            //child: const Icon(Icons.person,
-            //color: Colors.white,
-            //),
-          //),
+          CircleAvatar(
+              radius: 25,
+              backgroundImage: NetworkImage(
+                imageUrl != '' ? imageUrl : 'https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png',
+              ),
+            ),
+          const SizedBox(width: 20,),
+
           Column(
             children: [
               //like button
               LikeButton(isLiked: isLiked, onTap: toggleLike),
               const SizedBox(height: 5),
               //Amount of likes text
-              Text(widget.likes.length.toString())
+              Text(widget.likes.length.toString()),
             ],
           ),
           const SizedBox(width: 20,),
@@ -110,20 +140,22 @@ class _WallPostState extends State<WallPost> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.user,
-                    style: TextStyle(color: Colors.redAccent),
+                    widget.userEmail,
+                    style: TextStyle(color: Colors.black, fontFamily: 'Roboto', fontSize: 14),
                   ),
                   const SizedBox(height: 10),
-                  Text(widget.message),
+                  Text(widget.message, style: TextStyle(color: Colors.black, fontFamily: 'Roboto', fontSize: 15,),),
                 ],
               ),
               //delete button
-              if (widget.user == currentUser.email)
+              const SizedBox(width: 44,),
+              //delete button
+              if (widget.userEmail == currentEmail)
                 DeleteButton(onTap: deletePost),
               
             ],
           ),
-        ],
+      ],
       ),
     );
   }

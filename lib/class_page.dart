@@ -42,8 +42,26 @@ class _ClassPageState extends State<ClassPage> {
           ],
         ),
       drawer: Drawer(
+        backgroundColor: Colors.blueGrey.shade900,
           child: Column(
             children: [
+              SizedBox(
+                height: 50,
+              ),
+              Container(
+                height: 50,
+                width: double.infinity,
+                padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                alignment: Alignment.centerLeft,
+                color: Colors.grey.shade900,
+                child: Row(
+                  children: [
+                    Text('Friends', style: TextStyle(fontFamily: 'Roboto', color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 20),),
+                    SizedBox(width: 10,),
+                    IconButton(onPressed: (){}, icon: Icon(Icons.person_3_outlined, color: Colors.amber,))
+                  ],
+                ),
+              ),
               Expanded(
                 child: StreamBuilder(
                   stream: FirebaseFirestore.instance.collection('Users').doc(FirebaseAuth.instance.currentUser!.email).snapshots(),
@@ -57,7 +75,7 @@ class _ClassPageState extends State<ClassPage> {
                         itemCount: snapshot.data!['Friends'].length,
                         itemBuilder: (context, index) {
                           return ListTile(
-                            title: Text(snapshot.data!['Friends'][index]),
+                            title: Text(snapshot.data!['Friends'][index], style: TextStyle(fontFamily: 'Roboto', color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 15),),
                             onTap: () {
                               selectedUser = snapshot.data!['Friends'][index];
                               Navigator.push(context,MaterialPageRoute(builder: (context) => HomePage(),),);
@@ -88,7 +106,7 @@ class _ClassPageState extends State<ClassPage> {
                               itemCount: snapshot.data!['Registered Classes'].length,
                               itemBuilder: (context, index) {
                                 return ListTile(
-                                  title: Text(snapshot.data!['Registered Classes'][index]),
+                                  title: Text(snapshot.data!['Registered Classes'][index], style: TextStyle(fontFamily: 'Roboto', color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 19)),
                                   onTap: () {
                                     currentClass = snapshot.data!['Registered Classes'][index];
                                     print (currentClass);

@@ -16,7 +16,7 @@ class MyTextBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey[200],
+        color: Colors.amber,
         borderRadius: BorderRadius.circular(8)
       ),
       padding: const EdgeInsets.only(left:15, bottom: 15),
@@ -30,13 +30,13 @@ class MyTextBox extends StatelessWidget {
             children: [
               Text(
                 sectionName,
-                style: TextStyle(color: Colors.redAccent),
+                style: TextStyle(color: Colors.lightBlueAccent, fontFamily: 'Roboto', fontWeight: FontWeight.bold, fontSize: 14),
               ),
               IconButton(onPressed: onPressed, icon: Icon(Icons.settings))
             ],
           ),
           // text
-          Text(text),
+          Text(text, style: TextStyle(color: Colors.blueGrey, fontFamily: 'Roboto', fontSize: 15, fontWeight: FontWeight.bold,),),
         ]
       ),
 

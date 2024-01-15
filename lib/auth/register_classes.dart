@@ -20,6 +20,7 @@ class _RegisterClasses extends State<RegisterClasses> {
   List<DropdownMenuItem> classList = [];
   int docCount = 0;
   List<String> registeredClasses= [];
+  Color color = Colors.orange;
 
   @override
   initState() {
@@ -130,9 +131,11 @@ class _RegisterClasses extends State<RegisterClasses> {
                                 if(registeredClasses.contains(snap['name'].toString())) {
                                   // Remove from registeredClasses
                                   registeredClasses.remove(snap['name'].toString());
+                                  color = Colors.orange;
                                 } else {
                                   // Add to registeredClasses
                                   registeredClasses.add(snap['name'].toString());
+                                  color = Colors.blue;
                                 }
                                 print (registeredClasses);
                               },
@@ -140,7 +143,8 @@ class _RegisterClasses extends State<RegisterClasses> {
                                 snap['name'],
                                 style: const TextStyle(color: Colors.white),
                               ),
-                              style: ElevatedButton.styleFrom(primary: Colors.blue)),
+                                //how do i style the buttons individually?
+                              style: ElevatedButton.styleFrom(primary: color)),
                           );
                         }
                         return GridView.count(

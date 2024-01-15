@@ -1,9 +1,12 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:classchat/text_box.dart';
 import 'auth/constants.dart';
+import 'message_page.dart';
+
 
 class FriendProfilePage extends StatefulWidget {
   const FriendProfilePage({super.key});
@@ -13,8 +16,23 @@ class FriendProfilePage extends StatefulWidget {
 }
 
 class _FriendProfilePageState extends State<FriendProfilePage> {
+  final storage = FirebaseStorage.instance;
+  late String imageUrl = '';
     final currentUser = FirebaseAuth.instance.currentUser!;
     final userCollections = FirebaseFirestore.instance.collection('Users');
+
+    void initState() {
+      super.initState();
+      getImageUrl();
+    }
+
+  Future<void> getImageUrl () async {
+    final ref = storage.ref().child(selectedUser);
+    final url = await ref.getDownloadURL();
+    setState(() {
+      imageUrl = url;
+    });
+  }
 
     Future<void> editField(String field) async {
       String newValue = "";
@@ -61,7 +79,6 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
     Widget build(BuildContext context) {
       return Scaffold(
         appBar: AppBar(
-          title: Center(child: Text('ClassChat')),
         ),
           body: StreamBuilder<DocumentSnapshot>(
             stream: FirebaseFirestore.instance.collection('Users').doc(selectedUser).snapshots(),
@@ -72,15 +89,18 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                 return ListView(
                   children: [
                     const SizedBox(height: 50),
-                    Icon(
-                      Icons.person,
-                      size: 72,
+                    CircleAvatar(
+                      radius: 64,
+                      backgroundImage: NetworkImage(
+                        imageUrl != '' ? imageUrl : 'https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png',
+                      ),
                     ),
+                    const SizedBox(height: 20,),
 
                     Text(
                       selectedUser!,
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.redAccent),
+                      style: TextStyle(color: Colors.amber),
                     ),
 
                     const SizedBox(height: 10,),
@@ -89,10 +109,11 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                       child: InkWell(
                         onTap: () => {
                           //add friend
-                          userCollections.doc(currentUser.email).update({'Friends': FieldValue.arrayUnion([selectedUser])})
+                          userCollections.doc(currentUser.email).update({'Friends': FieldValue.arrayUnion([selectedUser])}),
+                          Navigator.push(context,MaterialPageRoute(builder: (context) => HomePage(),),),
                         },
                         child: Text(
-                          'Add Friend',
+                          'Direct Message',
                           style: TextStyle(color: Colors.redAccent),
                         ),
                       ),
