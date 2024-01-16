@@ -80,11 +80,9 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.logout)),
         ],
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Expanded(
-              child: StreamBuilder(
+          body: Column(
+            children: [
+              StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection("User Posts" + currentClass + dmID)
                     .orderBy(
@@ -95,19 +93,21 @@ class _HomePageState extends State<HomePage> {
                     builder: (context, snapshot) {
                     if(snapshot.hasData){
                       //get the message
-                      return ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context,index) {
-                          final post = snapshot.data!.docs[index];
-                          return WallPost(
-                            currentUserName: post['currentUserName'],
-                            userEmail: post['UserEmail'],
-                            message: post['Message'],
-                            imgUrl: post['imgUrl'],
-                            postId: post.id,
-                            likes: List<String>.from(post['Likes'] ?? []),
-                          );
-                        },
+                      return Expanded(
+                        child: ListView.builder(
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (context,index) {
+                            final post = snapshot.data!.docs[index];
+                            return WallPost(
+                              currentUserName: post['currentUserName'],
+                              userEmail: post['UserEmail'],
+                              message: post['Message'],
+                              imgUrl: post['imgUrl'],
+                              postId: post.id,
+                              likes: List<String>.from(post['Likes'] ?? []),
+                            );
+                          },
+                        ),
                       );
                     } else if (snapshot.hasError){
                       return Center(
@@ -119,29 +119,27 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                 ),
+              Padding(
+                padding: const EdgeInsets.all(25.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: MyTextField(
+                          controller: textController,
+                          hintText: "Write something on the wall...",
+                          obscureText: false,
+                        ),
+                    ),
+                    //Post Button
+                    IconButton(onPressed: postMessage, icon: const Icon(Icons.arrow_circle_up)),
+                  ],
+                ),
               ),
-            Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Row(
-                children: [
-                  Expanded(
-                      child: MyTextField(
-                        controller: textController,
-                        hintText: "Write something on the wall...",
-                        obscureText: false,
-                      ),
-                  ),
-                  //Post Button
-                  IconButton(onPressed: postMessage, icon: const Icon(Icons.arrow_circle_up)),
-                ],
-              ),
-            ),
-
-            Text("Logged in as: " + currentUser.email!),
-            const SizedBox(height: 30),
-          ],
-        ),
-      ),
+          
+              Text("Logged in as: " + currentUser.email!),
+              const SizedBox(height: 30),
+            ],
+          ),
     );
   }
 }

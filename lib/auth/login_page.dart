@@ -69,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Colors.grey[900],
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -80,18 +80,19 @@ class _LoginPageState extends State<LoginPage> {
                 const Icon(
                   Icons.lock,
                   size: 100,
+                  color: Colors.blue,
                 ),
                 Text("Welcome back! You've been missed!"),
                 const SizedBox(height: 25,),
 
-                MyTextField(controller: emailTextController, hintText: 'Email', obscureText: false,),
+                MyTextField(controller: emailTextController, hintText: 'Email', obscureText: false),
 
                 const SizedBox(height: 10,),
 
                 MyTextField(controller: passwordTextController, hintText: 'Password', obscureText: true),
 
                 const SizedBox(height: 25,),
-                //sign in button
+                //sign in butt
                 MyButton(onTap: signIn, text: 'Sign in',),
 
                 const SizedBox(height: 25,),

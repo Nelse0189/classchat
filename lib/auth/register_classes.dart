@@ -122,6 +122,7 @@ class _RegisterClasses extends State<RegisterClasses> {
                         List<Widget> subcategoryButtons = [];
                         for (int i = 0; i < snapshot.data!.docs.length; i++) {
                           DocumentSnapshot snap = snapshot.data!.docs[i];
+                          Color buttonColor = registeredClasses.contains(snap['name'].toString()) ? Colors.blue : Colors.orange;
                           subcategoryButtons.add(
                             ElevatedButton(
                               onPressed: () {
@@ -131,11 +132,9 @@ class _RegisterClasses extends State<RegisterClasses> {
                                 if(registeredClasses.contains(snap['name'].toString())) {
                                   // Remove from registeredClasses
                                   registeredClasses.remove(snap['name'].toString());
-                                  color = Colors.orange;
                                 } else {
                                   // Add to registeredClasses
                                   registeredClasses.add(snap['name'].toString());
-                                  color = Colors.blue;
                                 }
                                 print (registeredClasses);
                               },
@@ -144,7 +143,7 @@ class _RegisterClasses extends State<RegisterClasses> {
                                 style: const TextStyle(color: Colors.white),
                               ),
                                 //how do i style the buttons individually?
-                              style: ElevatedButton.styleFrom(primary: color)),
+                              style: ElevatedButton.styleFrom(primary: buttonColor),),
                           );
                         }
                         return GridView.count(

@@ -15,6 +15,8 @@ class MyTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      maxLength: 200,
+      style: TextStyle(color: Colors.blueGrey, fontFamily: 'Roboto', fontSize: 15, fontWeight: FontWeight.bold,),
       controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
@@ -27,7 +29,7 @@ class MyTextField extends StatelessWidget {
         fillColor: Colors.amber,
         filled: true,
         hintText: hintText,
-        hintStyle: TextStyle(color: Colors.amber),
+        hintStyle: TextStyle(color: Colors.blueGrey, fontFamily: 'Roboto', fontSize: 15, fontWeight: FontWeight.bold,),
       ),
     );
   }

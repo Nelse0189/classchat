@@ -110,8 +110,8 @@ class _WallPostState extends State<WallPost> {
         color: Colors.amber,
         borderRadius: BorderRadius.circular(8),
       ),
-      margin: EdgeInsets.only(top: 25, left: 25, right: 25),
-      padding: EdgeInsets.all(25),
+      margin: EdgeInsets.only(top: 15, left: 15, right: 15),
+      padding: EdgeInsets.all(15),
       child: Row(
         children: [
           //profile pic
@@ -121,7 +121,7 @@ class _WallPostState extends State<WallPost> {
                 imageUrl != '' ? imageUrl : 'https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png',
               ),
             ),
-          const SizedBox(width: 20,),
+          const SizedBox(width: 10,),
 
           Column(
             children: [
@@ -129,33 +129,51 @@ class _WallPostState extends State<WallPost> {
               LikeButton(isLiked: isLiked, onTap: toggleLike),
               const SizedBox(height: 5),
               //Amount of likes text
-              Text(widget.likes.length.toString()),
+              Text(
+                  widget.likes.length.toString(),
+                  ),
+              const SizedBox(height:10),
+              if (widget.userEmail == currentEmail)
+                DeleteButton(onTap: deletePost),
             ],
           ),
           const SizedBox(width: 20,),
           //wallpost
-          Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.userEmail,
-                    style: TextStyle(color: Colors.black, fontFamily: 'Roboto', fontSize: 14),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(widget.message, style: TextStyle(color: Colors.black, fontFamily: 'Roboto', fontSize: 15,),),
-                ],
-              ),
-              //delete button
-              const SizedBox(width: 44,),
-              //delete button
-              if (widget.userEmail == currentEmail)
-                DeleteButton(onTap: deletePost),
-              
-            ],
+          Expanded(
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.currentUserName,
+                      style: TextStyle(color: Colors.black, fontFamily: 'Roboto', fontSize: 14),
+                    ),
+                    const SizedBox(height: 10),
+                    DecoratedBox(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: MediaQuery.of(context).size.width * 0.5,
+                        ),
+                        child: Text(
+                        widget.message,
+                        maxLines: 5,
+                        style: TextStyle(color: Colors.black, fontFamily: 'Roboto', fontSize: 15,
+                        ),),
+                      
+                      ),
+                    ),
+                  ],
+                ),
+                
+              ],
+            ),
           ),
-      ],
+        ],
       ),
     );
   }
