@@ -9,17 +9,37 @@ import 'package:classchat/main.dart';
 import 'constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-bool isClassRegistered = false;
-final _firestore = FirebaseFirestore.instance;
-final collectionRef = _firestore.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).get()
-.then((snapshot) => {
-  isClassRegistered = snapshot.data()!['classRegistered'] as bool
-});
-// Get a reference to a specific document if needed:
-//final docRef = collectionRef.doc('classesRegistered');
 
-class AuthPage extends StatelessWidget {
-  const AuthPage({super.key});
+
+class AuthPage extends StatefulWidget {
+  AuthPage({super.key});
+
+  @override
+  State<AuthPage> createState() => _AuthPageState();
+}
+
+class _AuthPageState extends State<AuthPage> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  bool isClassRegistered = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkClassRegistration();
+  }
+
+  void _checkClassRegistration() async {
+    try {
+      var snapshot = await _firestore.collection('Users').doc(FirebaseAuth.instance.currentUser!.email).get();
+      setState(() {
+        isClassRegistered = snapshot.data()?['classRegistered'] ?? false;
+      });
+    } catch (e) {
+      // Handle any errors here
+      print("Error fetching data: $e");
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +47,10 @@ class AuthPage extends StatelessWidget {
       body: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context,snapshot){
-          if (snapshot.hasData && isClassRegistered == true) {
-            return const MyHomePage(title: "ClassChat");
+          if (snapshot.hasData && isClassRegistered) {
+            return const MyHomePage();
           }
-          else if (snapshot.hasData && isClassRegistered == false) {
+          else if (snapshot.hasData && !isClassRegistered) {
             return RegisterClasses();
           }
           else{

@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
             nullifyDMID();
             nullifySelectedUser();
             nullifyCurrentClass();
-            Navigator.push(context,MaterialPageRoute(builder: (context) => MyHomePage(title: 'ClassChat'),),);
+            Navigator.push(context,MaterialPageRoute(builder: (context) => MyHomePage(),),);
           },
         ),
         actions: [

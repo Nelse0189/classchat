@@ -34,6 +34,20 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
     });
   }
 
+  Future<String> getUsernameFromEmail(String userEmail) async {
+    try {
+      DocumentSnapshot userDoc = await userCollections.doc(userEmail).get();
+      if (userDoc.exists) {
+        return userDoc['username'] as String; // Assuming 'username' field exists
+      } else {
+        throw Exception("User not found");
+      }
+    } catch (e) {
+      print(e);
+      throw Exception("Error retrieving username");
+    }
+  }
+
     Future<void> editField(String field) async {
       String newValue = "";
       await showDialog(
@@ -107,11 +121,22 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
 
                     Center(
                       child: InkWell(
-                        onTap: () => {
-                          //add friend
-                          userCollections.doc(currentUser.email).update({'Friends': FieldValue.arrayUnion([selectedUser])}),
-                          Navigator.push(context,MaterialPageRoute(builder: (context) => HomePage(),),),
-                        },
+              onTap: () async {
+              try {
+              String friendUsername = await getUsernameFromEmail(selectedUser);
+              userCollections.doc(currentUser.email).update({
+              'Friends': FieldValue.arrayUnion([friendUsername])
+              });
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+              );
+              } catch (e) {
+              print("Error adding friend: $e");
+              }
+              },
+              // Rest of your InkWell properties...
+
                         child: Text(
                           'Direct Message',
                           style: TextStyle(color: Colors.redAccent),

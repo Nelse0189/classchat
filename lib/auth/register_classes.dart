@@ -170,7 +170,7 @@ class _RegisterClasses extends State<RegisterClasses> {
                       .update({'Registered Classes': registeredClasses});
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const MyHomePage(title: 'ClassChat',)),
+                    MaterialPageRoute(builder: (context) => const MyHomePage()),
                   );
                 },
                 child: const Text('Submit'),

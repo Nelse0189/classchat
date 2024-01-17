@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'auth/register_classes.dart';
 import 'resources/add_data.dart';
 import 'package:classchat/text_box.dart';
 import 'package:classchat/utils.dart';
@@ -198,8 +199,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 50,
                   width: 150,
                   child: ElevatedButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: Text('Settings'),
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterClasses(),),),
+                    child: Text('Change Registered Classes'),
                   ),
                 ),
                 const SizedBox(height: 20,),

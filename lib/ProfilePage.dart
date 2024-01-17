@@ -21,7 +21,7 @@ class _SplashState extends State<Splash>{
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-            builder: (context) => MyHomePage(title: 'Class Chat')));
+            builder: (context) => MyHomePage()));
   }
 
   @override

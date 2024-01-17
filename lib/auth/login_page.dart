@@ -1,3 +1,4 @@
+import 'package:classchat/auth/auth.dart';
 import 'package:classchat/auth/register_classes.dart';
 import 'package:classchat/button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,12 +7,8 @@ import 'package:classchat/text_field.dart';
 import '../main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-bool isClassRegistered = false;
+bool isClassRegistered = true;
 final _firestore = FirebaseFirestore.instance;
-final collectionRef = _firestore.collection('Users').doc(FirebaseAuth.instance.currentUser!.uid).get()
-    .then((snapshot) => {
-  isClassRegistered = snapshot.data()!['classRegistered'] as bool
-});
 
 class LoginPage extends StatefulWidget {
   final Function()? onTap;
@@ -25,6 +22,19 @@ class _LoginPageState extends State<LoginPage> {
 
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void checkIfClassRegistered() async {
+    final user = FirebaseAuth.instance.currentUser!;
+    final userData = await _firestore.collection('Users').doc(user.email).get();
+    setState(() {
+      isClassRegistered = userData['classRegistered'];
+    });
+  }
 
   //user sign in
   void signIn() async {
@@ -42,13 +52,8 @@ class _LoginPageState extends State<LoginPage> {
         email: emailTextController.text,
         password: passwordTextController.text,
       );
-      if (context.mounted && isClassRegistered)
-        Navigator.push(context, MaterialPageRoute(
-          builder: (context) => MyHomePage(title: 'ClassChat'),),);
-      else
-        (context.mounted && !isClassRegistered);
       Navigator.push(
-        context, MaterialPageRoute(builder: (context) => RegisterClasses(),),);
+        context, MaterialPageRoute(builder: (context) => AuthPage(),),);
     } on FirebaseAuthException catch(e){
       Navigator.pop(context);
       displayMessage(e.code);

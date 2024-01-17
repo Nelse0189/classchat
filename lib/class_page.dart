@@ -56,7 +56,7 @@ class _ClassPageState extends State<ClassPage> {
                 color: Colors.grey.shade900,
                 child: Row(
                   children: [
-                    Text('Friends', style: TextStyle(fontFamily: 'Roboto', color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 20),),
+                    Text('Direct Messages', style: TextStyle(fontFamily: 'Roboto', color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 20),),
                     SizedBox(width: 10,),
                     IconButton(onPressed: (){}, icon: Icon(Icons.person_3_outlined, color: Colors.amber,))
                   ],
