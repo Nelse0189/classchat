@@ -32,8 +32,9 @@ class _ClassPageState extends State<ClassPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.pink.shade50,
         appBar: AppBar(
-          title: Text('ClassChat', style: TextStyle(fontFamily: 'Roboto'),),
+          title: Text('ClassChat', style: TextStyle(fontFamily: 'sfProBold'),),
           centerTitle: true,
           actions: [
             IconButton(
@@ -42,7 +43,7 @@ class _ClassPageState extends State<ClassPage> {
           ],
         ),
       drawer: Drawer(
-        backgroundColor: Colors.blueGrey.shade900,
+        backgroundColor: Colors.pink.shade300,
           child: Column(
             children: [
               SizedBox(
@@ -56,9 +57,9 @@ class _ClassPageState extends State<ClassPage> {
                 color: Colors.grey.shade900,
                 child: Row(
                   children: [
-                    Text('Direct Messages', style: TextStyle(fontFamily: 'Roboto', color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 20),),
+                    Text('Direct Messages', style: TextStyle(fontFamily: 'sfPro', color: Colors.pink, fontSize: 20),),
                     SizedBox(width: 10,),
-                    IconButton(onPressed: (){}, icon: Icon(Icons.person_3_outlined, color: Colors.amber,))
+                    IconButton(onPressed: (){}, icon: Icon(Icons.person_3_outlined, color: Colors.pinkAccent,))
                   ],
                 ),
               ),
@@ -75,7 +76,7 @@ class _ClassPageState extends State<ClassPage> {
                         itemCount: snapshot.data!['Friends'].length,
                         itemBuilder: (context, index) {
                           return ListTile(
-                            title: Text(snapshot.data!['Friends'][index], style: TextStyle(fontFamily: 'Roboto', color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 15),),
+                            title: Text(snapshot.data!['Friends'][index], style: TextStyle(fontFamily: 'sfProSemiBold', color: Colors.white, fontSize: 15),),
                             onTap: () {
                               selectedUser = snapshot.data!['Friends'][index];
                               Navigator.push(context,MaterialPageRoute(builder: (context) => HomePage(),),);
@@ -106,7 +107,7 @@ class _ClassPageState extends State<ClassPage> {
                               itemCount: snapshot.data!['Registered Classes'].length,
                               itemBuilder: (context, index) {
                                 return ListTile(
-                                  title: Text(snapshot.data!['Registered Classes'][index], style: TextStyle(fontFamily: 'Roboto', color: Colors.amber, fontWeight: FontWeight.bold, fontSize: 19)),
+                                  title: Text(snapshot.data!['Registered Classes'][index], style: TextStyle(fontFamily: 'sfPro', color: Colors.pink,  fontSize: 19)),
                                   onTap: () {
                                     currentClass = snapshot.data!['Registered Classes'][index];
                                     print (currentClass);

@@ -107,7 +107,7 @@ class _WallPostState extends State<WallPost> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.amber,
+        color: Colors.pink.shade100,
         borderRadius: BorderRadius.circular(8),
       ),
       margin: EdgeInsets.only(top: 15, left: 15, right: 15),
@@ -147,12 +147,12 @@ class _WallPostState extends State<WallPost> {
                   children: [
                     Text(
                       widget.currentUserName,
-                      style: TextStyle(color: Colors.black, fontFamily: 'Roboto', fontSize: 14),
+                      style: TextStyle(color: Colors.black, fontFamily: 'sfProSemiBold', fontSize: 14),
                     ),
                     const SizedBox(height: 10),
                     DecoratedBox(
                       decoration: BoxDecoration(
-                        color: Colors.grey[300],
+                        color: Colors.pinkAccent,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: ConstrainedBox(
@@ -162,7 +162,7 @@ class _WallPostState extends State<WallPost> {
                         child: Text(
                         widget.message,
                         maxLines: 5,
-                        style: TextStyle(color: Colors.black, fontFamily: 'Roboto', fontSize: 15,
+                        style: TextStyle(color: Colors.black, fontFamily: 'sfPro', fontSize: 15,
                         ),),
                       
                       ),

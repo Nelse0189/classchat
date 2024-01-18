@@ -16,20 +16,20 @@ class MyTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       maxLength: 200,
-      style: TextStyle(color: Colors.blueGrey, fontFamily: 'Roboto', fontSize: 15, fontWeight: FontWeight.bold,),
+      style: TextStyle(color: Colors.blueGrey, fontFamily: 'sfPro', fontSize: 15,),
       controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
         enabledBorder: const OutlineInputBorder(
-          borderSide:BorderSide(color: Colors.amber),
+          borderSide:BorderSide(color: Colors.pink),
         ),
         focusedBorder: const OutlineInputBorder(
-          borderSide:BorderSide(color: Colors.amber),
+          borderSide:BorderSide(color: Colors.pink),
         ),
-        fillColor: Colors.amber,
+        fillColor: Colors.pink,
         filled: true,
         hintText: hintText,
-        hintStyle: TextStyle(color: Colors.blueGrey, fontFamily: 'Roboto', fontSize: 15, fontWeight: FontWeight.bold,),
+        hintStyle: TextStyle(color: Colors.black, fontFamily: 'sfPro', fontSize: 15,),
       ),
     );
   }

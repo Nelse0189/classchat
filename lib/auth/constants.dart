@@ -9,10 +9,19 @@ String selectedUser = '';
 String dmID = '';
 String currentUsername = '';
 String currentEmail = FirebaseAuth.instance.currentUser!.email!;
+String colorMode= 'brightness: Brightness.light';
 
 final userCollections = FirebaseFirestore.instance.collection('Users');
 List<DocumentSnapshot> users = [];
 List<DocumentSnapshot> permUsers = [];
+
+void changeColorMode() {
+  if (colorMode == 'dark') {
+    colorMode = 'light';
+  } else {
+    colorMode = 'dark';
+  }
+}
 
 Future<String> getUserId() async {
   QuerySnapshot querySnapshot = await userCollections.get();

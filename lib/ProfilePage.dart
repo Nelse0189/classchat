@@ -37,7 +37,7 @@ class _SplashState extends State<Splash>{
             Container(
               child: Text('Class Chat ', style: TextStyle(
                 fontSize: 24.0,
-                fontFamily: 'Roboto',
+                fontFamily: 'sfPro',
                 ),
               ),
             ),

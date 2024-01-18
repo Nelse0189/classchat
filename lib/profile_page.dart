@@ -1,4 +1,6 @@
 import 'dart:typed_data';
+import 'package:classchat/auth/constants.dart';
+
 import 'auth/register_classes.dart';
 import 'resources/add_data.dart';
 import 'package:classchat/text_box.dart';
@@ -72,17 +74,17 @@ class _ProfilePageState extends State<ProfilePage> {
     await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          backgroundColor: Colors.grey[900],
+          backgroundColor: Colors.pinkAccent,
           title: Text(
             "Edit "+ field,
-            style: const TextStyle(color: Colors.amber),
+            style: const TextStyle(color: Colors.pink),
           ),
           content: TextField(
           autofocus: true,
-          style: TextStyle(color: Colors.amber),
+          style: TextStyle(color: Colors.pink),
           decoration: InputDecoration(
             hintText: "Enter New" + field,
-            hintStyle: TextStyle(color: Colors.grey),
+            hintStyle: TextStyle(color: Colors.pink),
           ),
           onChanged: (value) {
             newValue = value;
@@ -93,11 +95,11 @@ class _ProfilePageState extends State<ProfilePage> {
             //cancel button
             TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text('Cancel', style: TextStyle(color: Colors.amber),),),
+                child: Text('Cancel', style: TextStyle(color: Colors.pink),),),
             //save button
             TextButton(
                 onPressed: () => Navigator.of(context).pop(newValue),
-                child: Text('Save', style: TextStyle(color: Colors.amber),),),
+                child: Text('Save', style: TextStyle(color: Colors.pink),),),
           ],
         ),
     );
@@ -127,6 +129,12 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text('ClassChat', style: TextStyle(fontFamily: 'sfProBold'),),
+          centerTitle: true,
+        ),
+      backgroundColor: Colors.pink.shade50,
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance.collection('Users').doc(currentUser.email).snapshots(),
         builder: (context, snapshot){
@@ -157,7 +165,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Positioned(
                     child: IconButton
                     (onPressed: selectImage,
-                    icon: Icon(Icons.add_a_photo, color: Colors.blueGrey, size: 30,),
+                    icon: Icon(Icons.add_a_photo, color: Colors.grey, size: 25,),
                   ),
                   bottom: -10,
                   right: 130
@@ -170,7 +178,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Text(
                   currentUser.email!,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.lightBlueAccent, fontFamily: 'Roboto', fontWeight: FontWeight.bold, fontSize: 16),
+                  style: TextStyle(color: Colors.lightBlueAccent, fontFamily: 'sfProSemiBold', fontSize: 16),
                 ),
 
                 const SizedBox(height: 50,),
@@ -179,7 +187,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   padding: const EdgeInsets.only(left:25),
                   child: Text(
                     'My Details',
-                    style: TextStyle(color: Colors.lightBlueAccent, fontFamily: 'Roboto', fontWeight: FontWeight.bold, fontSize: 14),
+                    style: TextStyle(color: Colors.lightBlueAccent, fontFamily: 'sfProSemiBold', fontSize: 14),
                   ),
                 ),
                 //username
@@ -200,10 +208,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: 150,
                   child: ElevatedButton(
                     onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterClasses(),),),
-                    child: Text('Change Registered Classes'),
+                    child: Text('Change Registered Classes', style: TextStyle(color: Colors.white, fontFamily: 'sfProSemiBold', fontSize: 14),),
                   ),
                 ),
                 const SizedBox(height: 20,),
+
 
 
               ],

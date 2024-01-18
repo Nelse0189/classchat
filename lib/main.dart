@@ -11,6 +11,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter/services.dart';
 import 'class_page.dart';
+import 'auth/constants.dart';
 void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.blue,
@@ -52,7 +53,7 @@ class MyApp extends StatelessWidget {
           // tested with just a hot reload.
 
           colorScheme:
-              ColorScheme.fromSeed(seedColor: Colors.amber, brightness: Brightness.dark),
+              ColorScheme.fromSeed(seedColor: Colors.pink,brightness: Brightness.light),
           useMaterial3: false,
         ),
         home: AnimatedSplashScreen(
