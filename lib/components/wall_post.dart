@@ -13,7 +13,7 @@ class WallPost extends StatefulWidget {
   final String currentUserName;
   //final String time;
   final String postId;
-  final List<String> likes;
+  final List<String> Likes;
   const WallPost({
     super.key,
     required this.imgUrl,
@@ -21,7 +21,7 @@ class WallPost extends StatefulWidget {
     required this.message,
     required this.currentUserName,
     required this.postId,
-    required this.likes,
+    required this.Likes,
     //required this.time,
   });
 
@@ -51,14 +51,14 @@ class _WallPostState extends State<WallPost> {
     // TODO: implement initState
     super.initState();
     getImageUrl();
-    isLiked =  widget.likes.contains(currentEmail);
+    isLiked =  widget.Likes.contains(currentEmail);
   }
 
   void toggleLike(){
     setState(() {
       isLiked = !isLiked;
     });
-    DocumentReference postRef = FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
+    DocumentReference postRef = FirebaseFirestore.instance.collection('User Posts'+ currentClass + dmID).doc(widget.postId);
 
     if (isLiked) {
       postRef.update({
@@ -69,7 +69,6 @@ class _WallPostState extends State<WallPost> {
         'Likes' : FieldValue.arrayRemove([currentEmail])
       });
     }
-    print(currentUser!.displayName!)  ;
   }
   //delete post
   void deletePost() {
@@ -130,7 +129,7 @@ class _WallPostState extends State<WallPost> {
               const SizedBox(height: 5),
               //Amount of likes text
               Text(
-                  widget.likes.length.toString(),
+                  widget.Likes.length.toString(),
                   ),
               const SizedBox(height:10),
               if (widget.userEmail == currentEmail)

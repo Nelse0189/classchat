@@ -16,7 +16,7 @@ class MyTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       maxLength: 200,
-      style: TextStyle(color: Colors.blueGrey, fontFamily: 'sfPro', fontSize: 15,),
+      style: TextStyle(color: Colors.black, fontFamily: 'sfPro', fontSize: 15,),
       controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(

@@ -95,7 +95,7 @@ class _SearchPageState extends State<SearchPage>{
                 contentPadding: EdgeInsets.all(0),
                 prefixIcon: Icon(
                   Icons.search,
-                  color: Colors.grey.shade500,
+                  color: Colors.grey.shade50,
                 ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(50),
@@ -114,7 +114,7 @@ class _SearchPageState extends State<SearchPage>{
         ),
         body: Container(
           padding: EdgeInsets.only(right: 20, left: 20),
-          color: Colors.pink.shade300,
+          color: Colors.pink.shade50,
           child: _foundedUsers.length > 0 ? ListView.builder(
             itemCount: users.length,
             itemBuilder: (context, index) {
