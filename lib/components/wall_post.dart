@@ -106,7 +106,7 @@ class _WallPostState extends State<WallPost> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.pink.shade100,
+        color: theme2,
         borderRadius: BorderRadius.circular(8),
       ),
       margin: EdgeInsets.only(top: 15, left: 15, right: 15),
@@ -151,12 +151,12 @@ class _WallPostState extends State<WallPost> {
                     const SizedBox(height: 10),
                     DecoratedBox(
                       decoration: BoxDecoration(
-                        color: Colors.pinkAccent,
+                        color: theme,
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
-                          maxWidth: MediaQuery.of(context).size.width * 0.5,
+                          maxWidth: MediaQuery.of(context).size.width * 0.58,
                         ),
                         child: Text(
                         widget.message,

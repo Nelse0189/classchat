@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                 const Icon(
                   Icons.lock,
                   size: 100,
-                  color: Colors.blue,
+                  color: Colors.black87,
                 ),
                 Text("Welcome back! You've been missed!", style: TextStyle(fontFamily: 'sfPro', fontSize: 17),),
                 const SizedBox(height: 25,),

@@ -85,6 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   const Icon(
                     Icons.lock,
                     size: 100,
+                    color: Colors.black87,
                   ),
                   Text("Let's create an Account for you!"),
                   const SizedBox(height: 25,),
