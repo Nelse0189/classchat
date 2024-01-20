@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:classchat/text_field.dart';
 import '../main.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:classchat/auth/constants.dart';
 
 bool isClassRegistered = true;
 final _firestore = FirebaseFirestore.instance;
@@ -74,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[900],
+      backgroundColor: Colors.grey[300],
       body: SafeArea(
         child: Center(
           child: Padding(
@@ -87,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                   size: 100,
                   color: Colors.blue,
                 ),
-                Text("Welcome back! You've been missed!"),
+                Text("Welcome back! You've been missed!", style: TextStyle(fontFamily: 'sfPro', fontSize: 17),),
                 const SizedBox(height: 25,),
 
                 MyTextField(controller: emailTextController, hintText: 'Email', obscureText: false),
@@ -105,14 +106,14 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Not a member?"),
+                    Text("Not a member?", style: TextStyle(fontFamily: 'sfPro', fontSize: 14),),
                     const SizedBox(width: 4,),
                     GestureDetector(
                       onTap: widget.onTap,
                       child: const Text(
                         'Register Now!',
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                          fontFamily: 'sfProBold',
                           color: Colors.blue,
                         ),
                       ),

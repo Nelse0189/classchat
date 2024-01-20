@@ -84,7 +84,7 @@ class _SearchPageState extends State<SearchPage>{
         appBar: AppBar(
           automaticallyImplyLeading: false, //remove back button
           elevation: 0,
-          backgroundColor: Colors.pink.shade500,
+          backgroundColor: theme,
           title: Container(
             height: 38,
             child: TextField(
@@ -114,7 +114,7 @@ class _SearchPageState extends State<SearchPage>{
         ),
         body: Container(
           padding: EdgeInsets.only(right: 20, left: 20),
-          color: Colors.pink.shade50,
+          color: theme2,
           child: _foundedUsers.length > 0 ? ListView.builder(
             itemCount: users.length,
             itemBuilder: (context, index) {
@@ -127,7 +127,7 @@ class _SearchPageState extends State<SearchPage>{
                   ),
                 ),
                 title: Text(
-                    users[index]['username']),
+                    users[index]['username'], style: TextStyle(fontFamily: 'sfPro', color: Colors.black, fontSize: 16)),
                 subtitle: Text('online'),
                 trailing: Icon(Icons.message),
                 onTap: () {
@@ -136,7 +136,7 @@ class _SearchPageState extends State<SearchPage>{
                 }
               );
             },
-          ) : Center(child: Text("No users found", style: TextStyle(color: Colors.white, fontFamily: 'sfPro', fontSize: 15),),),
+          ) : Center(child: Text("No users found", style: TextStyle(color: Colors.black, fontFamily: 'sfPro', fontSize: 15),),),
         ),
       ),
     );

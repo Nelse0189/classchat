@@ -74,17 +74,17 @@ class _ProfilePageState extends State<ProfilePage> {
     await showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          backgroundColor: Colors.pinkAccent,
+          backgroundColor: theme,
           title: Text(
             "Edit "+ field,
-            style: const TextStyle(color: Colors.pink),
+            style: TextStyle(color: Colors.black, fontFamily: 'sfProBold'),
           ),
           content: TextField(
           autofocus: true,
-          style: TextStyle(color: Colors.pink),
+          style: TextStyle(color: Colors.black, fontFamily: 'sfPro'),
           decoration: InputDecoration(
             hintText: "Enter New" + field,
-            hintStyle: TextStyle(color: Colors.pink),
+            hintStyle: TextStyle(color: Colors.black, fontFamily: 'sfPro'),
           ),
           onChanged: (value) {
             newValue = value;
@@ -95,11 +95,11 @@ class _ProfilePageState extends State<ProfilePage> {
             //cancel button
             TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text('Cancel', style: TextStyle(color: Colors.pink),),),
+                child: Text('Cancel', style: TextStyle(color: Colors.black),),),
             //save button
             TextButton(
                 onPressed: () => Navigator.of(context).pop(newValue),
-                child: Text('Save', style: TextStyle(color: Colors.pink),),),
+                child: Text('Save', style: TextStyle(color: Colors.black),),),
           ],
         ),
     );
@@ -130,11 +130,13 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: theme,
+          titleTextStyle: TextStyle(fontFamily: 'sfProBold', color: Colors.black, fontSize: 20),
           automaticallyImplyLeading: false,
           title: Text('ClassChat', style: TextStyle(fontFamily: 'sfProBold'),),
           centerTitle: true,
         ),
-      backgroundColor: Colors.pink.shade50,
+      backgroundColor: theme2,
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance.collection('Users').doc(currentUser.email).snapshots(),
         builder: (context, snapshot){
@@ -165,7 +167,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   Positioned(
                     child: IconButton
                     (onPressed: selectImage,
-                    icon: Icon(Icons.add_a_photo, color: Colors.grey, size: 25,),
+                    icon: Icon(Icons.add_a_photo, color: theme, size: 25,),
                   ),
                   bottom: -10,
                   right: 130
@@ -178,7 +180,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Text(
                   currentUser.email!,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.lightBlueAccent, fontFamily: 'sfProSemiBold', fontSize: 16),
+                  style: TextStyle(color: Colors.black, fontFamily: 'sfProSemiBold', fontSize: 16),
                 ),
 
                 const SizedBox(height: 50,),
@@ -187,7 +189,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   padding: const EdgeInsets.only(left:25),
                   child: Text(
                     'My Details',
-                    style: TextStyle(color: Colors.lightBlueAccent, fontFamily: 'sfProSemiBold', fontSize: 14),
+                    style: TextStyle(color: Colors.black, fontFamily: 'sfProSemiBold', fontSize: 14),
                   ),
                 ),
                 //username
@@ -212,6 +214,15 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 const SizedBox(height: 20,),
+                Container(
+                  height: 50,
+                  width: 150,
+                  child: ElevatedButton(
+                    onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ThemePage(),),),
+                    child: Text('Change Theme', style: TextStyle(color: Colors.white, fontFamily: 'sfProSemiBold', fontSize: 14),),
+                  ),
+                ),
+
 
 
 

@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
           // tested with just a hot reload.
 
           colorScheme:
-              ColorScheme.fromSeed(seedColor: Colors.pink,brightness: Brightness.light),
+              ColorScheme.fromSeed(seedColor: theme,brightness: Brightness.light),
           useMaterial3: false,
         ),
         home: AnimatedSplashScreen(

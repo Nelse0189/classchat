@@ -26,6 +26,7 @@ class _AuthPageState extends State<AuthPage> {
   void initState() {
     super.initState();
     _checkClassRegistration();
+    getUserTheme();
   }
 
   void _checkClassRegistration() async {

@@ -41,9 +41,11 @@ class _RegisterPageState extends State<RegisterPage> {
       FirebaseFirestore.instance.collection('Users')
       .doc(userCredential.user!.email)
       .set({
+        'Friends' : [],
         'username' : emailTextController.text.split('@')[0],
         'bio' : 'Empty bio...',
-        'classesRegistered' : false
+        'classesRegistered' : false,
+        'theme' : 'default',
       });
       CollectionReference classesCollection = FirebaseFirestore.instance
           .collection('Users')
@@ -76,56 +78,58 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.lock,
-                  size: 100,
-                ),
-                Text("Let's create an Account for you!"),
-                const SizedBox(height: 25,),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.lock,
+                    size: 100,
+                  ),
+                  Text("Let's create an Account for you!"),
+                  const SizedBox(height: 25,),
 
-                MyTextField(controller: emailTextController, hintText: 'Email', obscureText: false,),
+                  MyTextField(controller: emailTextController, hintText: 'Email', obscureText: false,),
 
-                const SizedBox(height: 10,),
+                  const SizedBox(height: 10,),
 
-                MyTextField(controller: passwordTextController, hintText: 'Password', obscureText: true),
-                
-                const SizedBox(height: 10,),
-                
-                MyTextField(controller: confirmPasswordTextController, hintText: 'Confirm Password', obscureText: true),
+                  MyTextField(controller: passwordTextController, hintText: 'Password', obscureText: true),
 
-                const SizedBox(height: 25,),
-                //sign in button
-                MyButton(onTap: signUp, text: 'Sign up',),
+                  const SizedBox(height: 10,),
 
-                const SizedBox(height: 25,),
+                  MyTextField(controller: confirmPasswordTextController, hintText: 'Confirm Password', obscureText: true),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Already have an account?"),
-                    const SizedBox(width: 4,),
-                    GestureDetector(
-                      onTap: widget.onTap,
-                      child: const Text(
-                        'Log in!',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.orange,
+                  const SizedBox(height: 25,),
+                  //sign in button
+                  MyButton(onTap: signUp, text: 'Sign up',),
+
+                  const SizedBox(height: 25,),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Already have an account?", style: TextStyle(fontFamily: 'sfPro', fontSize: 15),),
+                      const SizedBox(width: 4,),
+                      GestureDetector(
+                        onTap: widget.onTap,
+                        child: const Text(
+                          'Log in!',
+                          style: TextStyle(
+                            fontFamily: 'sfProBold',
+                            color: Colors.blue,
+                          ),
                         ),
-                      ),
-                    )
-                  ],
-                )
+                      )
+                    ],
+                  )
 
 
 
 
 
-              ],
+                ],
 
+              ),
             ),
           ),
         ),

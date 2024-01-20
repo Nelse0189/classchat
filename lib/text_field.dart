@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:classchat/auth/constants.dart';
 
+
 class MyTextField extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
@@ -20,13 +21,13 @@ class MyTextField extends StatelessWidget {
       controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
-        enabledBorder: const OutlineInputBorder(
-          borderSide:BorderSide(color: Colors.pink),
+        enabledBorder: OutlineInputBorder(
+          borderSide:BorderSide(color: theme),
         ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide:BorderSide(color: Colors.pink),
+        focusedBorder: OutlineInputBorder(
+          borderSide:BorderSide(color: theme),
         ),
-        fillColor: Colors.pink,
+        fillColor: theme,
         filled: true,
         hintText: hintText,
         hintStyle: TextStyle(color: Colors.black, fontFamily: 'sfPro', fontSize: 15,),
