@@ -120,6 +120,7 @@ class _ProfilePageState extends State<ProfilePage> {
         _image = img;
       });
       saveProfile();
+      await Future.delayed(Duration(milliseconds: 700));
     }
     setState(() {
       isLoading = false;

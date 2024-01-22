@@ -80,7 +80,7 @@ class _ClassPageState extends State<ClassPage> {
                         itemCount: snapshot.data!['Friends'].length,
                         itemBuilder: (context, index) {
                           return ListTile(
-                            title: Text(snapshot.data!['Friends'][index], style: TextStyle(fontFamily: 'sfProSemiBold', color: Colors.white, fontSize: 16),),
+                            title: Text(snapshot.data!['Friends'][index], style: TextStyle(fontFamily: 'sfProSemiBold', color: Colors.black, fontSize: 16),),
                             onTap: () {
                               selectedUser = snapshot.data!['Friends'][index];
                               Navigator.push(context,MaterialPageRoute(builder: (context) => HomePage(),),);
