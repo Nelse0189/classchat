@@ -11,11 +11,13 @@ class WallPost extends StatefulWidget {
   final String message;
   final String imgUrl;
   final String currentUserName;
+  final String postImgUrl;
   //final String time;
   final String postId;
   final List<String> Likes;
   const WallPost({
     super.key,
+    required this.postImgUrl,
     required this.imgUrl,
     required this.userEmail,
     required this.message,
@@ -34,6 +36,7 @@ class _WallPostState extends State<WallPost> {
   final currentUserName = FirebaseFirestore.instance.collection('Users').doc(currentEmail).get().then((value) => value['username']);
   bool isLiked = false;
   final storage = FirebaseStorage.instance;
+  late String postImgUrl = '';
   late String imageUrl = '';
   //String currentUsername = FirebaseAuth.instance.currentUser!.email!;
 
@@ -132,7 +135,7 @@ class _WallPostState extends State<WallPost> {
                   widget.Likes.length.toString(),
                   ),
               const SizedBox(height:10),
-              if (widget.userEmail == currentEmail)
+              if (widget.userEmail == FirebaseAuth.instance.currentUser!.email!)
                 DeleteButton(onTap: deletePost),
             ],
           ),
@@ -146,12 +149,19 @@ class _WallPostState extends State<WallPost> {
                   children: [
                     Text(
                       widget.currentUserName,
-                      style: TextStyle(color: Colors.black, fontFamily: 'sfProSemiBold', fontSize: 14),
+                      style: TextStyle(color: theme, fontFamily: 'sfProSemiBold', fontSize: 14),
                     ),
+                    if (widget.postImgUrl.isNotEmpty)
+                      Image.network(
+                        widget.postImgUrl,
+                        width: MediaQuery.of(context).size.width * .58, // Adjust as per your UI design
+                        height: 200, // Adjust as per your UI design
+                        fit: BoxFit.cover,
+                      ),
                     const SizedBox(height: 10),
                     DecoratedBox(
                       decoration: BoxDecoration(
-                        color: theme,
+                        color: Colors.grey[300],
                         borderRadius: BorderRadius.circular(5),
                       ),
                       child: ConstrainedBox(

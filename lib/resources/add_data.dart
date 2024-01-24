@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:classchat/auth/constants.dart';
+import 'dart:io';
+import 'dart:typed_data';
 
 final FirebaseStorage _storage = FirebaseStorage.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -16,6 +18,16 @@ class StoreData {
     TaskSnapshot snapshot = await uploadTask;
     String downloadUrl = await snapshot.ref.getDownloadURL();
     return downloadUrl;
+  }
+
+  Future<Uint8List> convertImageToUint8List(String filePath) async {
+    // Create a File instance from the given file path
+    File imageFile = File(filePath);
+
+    // Read the file and convert it to Uint8List
+    Uint8List uint8list = await imageFile.readAsBytes();
+
+    return uint8list;
   }
 
   Future<String> saveData({

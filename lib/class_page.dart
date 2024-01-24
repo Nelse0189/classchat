@@ -35,15 +35,15 @@ class _ClassPageState extends State<ClassPage> {
     return Scaffold(
       backgroundColor: theme2,
         appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.black),
+          iconTheme: IconThemeData(color: Colors.white),
           backgroundColor: theme,
-          titleTextStyle: TextStyle(fontFamily: 'sfProBold', color: Colors.black, fontSize: 20),
-          title: Text('ClassChat', style: TextStyle(fontFamily: 'sfProBold'),),
+          titleTextStyle: TextStyle(fontFamily: 'sfPro', color: Colors.white, fontSize: 20),
+          title: Text('ClassChat', style: TextStyle(fontFamily: 'SfProBold'),),
           centerTitle: true,
           actions: [
             IconButton(
                 onPressed: signOut,
-                icon: Icon(Icons.logout), color: Colors.black,),
+                icon: Icon(Icons.logout), color: Colors.white,),
           ],
         ),
       drawer: Drawer(
@@ -82,7 +82,7 @@ class _ClassPageState extends State<ClassPage> {
                           return ListTile(
                             title: Text(snapshot.data!['Friends'][index], style: TextStyle(fontFamily: 'sfProSemiBold', color: Colors.black, fontSize: 16),),
                             onTap: () {
-                              selectedUser = snapshot.data!['Friends'][index];
+                              selectedUser = snapshot.data!['Friends'][index] + '@gmail.com';
                               Navigator.push(context,MaterialPageRoute(builder: (context) => HomePage(),),);
                             }
                           );

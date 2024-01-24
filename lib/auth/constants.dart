@@ -33,7 +33,7 @@ getUserTheme() async {
       .doc(currentEmail)
       .get();
   if (doc['theme'] == 'blue') {
-    theme = Colors.blue.shade300;
+    theme = Colors.blue.shade500;
     theme2 = Colors.blue.shade50;
     isBlue = true;
     isRed = false;
@@ -47,7 +47,7 @@ getUserTheme() async {
     isBlack = false;
     return themeColor.blue;
   } else if (doc['theme'] == 'red') {
-    theme = Colors.red.shade300;
+    theme = Colors.red.shade500;
     theme2 = Colors.red.shade50;
     isRed = true;
     isBlue = false;
@@ -61,7 +61,7 @@ getUserTheme() async {
     isBlack = false;
     return themeColor.red;
   } else if (doc['theme'] == 'green') {
-    theme = Colors.green.shade300;
+    theme = Colors.green.shade500;
     theme2 = Colors.green.shade50;
     isGreen = true;
     isBlue = false;
@@ -75,7 +75,7 @@ getUserTheme() async {
     isBlack = false;
     return themeColor.green;
   } else if (doc['theme'] == 'pink') {
-    theme = Colors.pink.shade300;
+    theme = Colors.pink.shade500;
     theme2 = Colors.pink.shade50;
     isPink = true;
     isBlue = false;
@@ -89,7 +89,7 @@ getUserTheme() async {
     isBlack = false;
     return themeColor.pink;
   } else if (doc['theme'] == 'purple') {
-    theme = Colors.purple.shade300;
+    theme = Colors.purple.shade500;
     theme2 = Colors.purple.shade50;
     isPurple = true;
     isBlue = false;
@@ -103,7 +103,7 @@ getUserTheme() async {
     isBlack = false;
     return themeColor.purple;
   } else if (doc['theme'] == 'yellow') {
-    theme = Colors.yellow.shade300;
+    theme = Colors.yellow.shade500;
     theme2 = Colors.yellow.shade50;
     isYellow = true;
     isBlue = false;
@@ -117,7 +117,7 @@ getUserTheme() async {
     isBlack = false;
     return themeColor.yellow;
   } else if (doc['theme'] == 'orange') {
-    theme = Colors.orange.shade300;
+    theme = Colors.orange.shade500;
     theme2 = Colors.orange.shade50;
     isOrange = true;
     isBlue = false;
@@ -131,7 +131,7 @@ getUserTheme() async {
     isBlack = false;
     return themeColor.orange;
   } else if (doc['theme'] == 'brown') {
-    theme = Colors.brown.shade300;
+    theme = Colors.brown.shade500;
     theme2 = Colors.brown.shade50;
     isBrown = true;
     isBlue = false;
@@ -145,7 +145,7 @@ getUserTheme() async {
     isBlack = false;
     return themeColor.brown;
   } else if (doc['theme'] == 'grey') {
-    theme = Colors.grey.shade300;
+    theme = Colors.grey.shade500;
     theme2 = Colors.grey.shade50;
     isGrey = true;
     isBlue = false;
@@ -159,7 +159,7 @@ getUserTheme() async {
     isBlack = false;
     return themeColor.grey;
   } else if (doc['theme'] == 'black') {
-    theme = Colors.black;
+    theme = Colors.black87;
     theme2 = Colors.grey.shade50;
     isBlack = true;
     isBlue = false;

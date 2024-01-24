@@ -1,9 +1,17 @@
+import 'dart:typed_data';
+
 import 'package:classchat/auth/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:classchat/text_field.dart';
 import 'package:classchat/button.dart';
+import 'package:classchat/auth/constants.dart';
+import'package:classchat/resources/add_data.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/services.dart';
 
 class RegisterPage extends StatefulWidget {
   final Function()? onTap;
@@ -18,8 +26,92 @@ class _RegisterPageState extends State<RegisterPage> {
   final emailTextController = TextEditingController();
   final passwordTextController = TextEditingController();
   final confirmPasswordTextController = TextEditingController();
+  bool isLoading = false;
+  late String imageUrl = '';
+  Uint8List? _image;
+  final _storage = FirebaseStorage.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<String> uploadImageToStorage(String childName,Uint8List file) async {
+    Reference ref = _storage.ref().child(childName);
+    UploadTask uploadTask = ref.putData(file);
+    TaskSnapshot snapshot = await uploadTask;
+    String downloadUrl = await snapshot.ref.getDownloadURL();
+    return downloadUrl;
+  }
+
+  Future<String> saveData({
+    required Uint8List file,
+  }) async {
+    String resp = " Some Error Occurred";
+    try{
+      String imageUrl = await uploadImageToStorage(emailTextController.text, file);
+      await _firestore.collection(emailTextController.text).add({
+        'imageLink': imageUrl,
+      });
+
+      resp = 'success';
+      print(resp);
+    }
+    catch(err){
+      resp =err.toString();
+    }
+    print (resp);
+    return resp;
+  }
+
+
+  Future<void> getImageUrl () async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      final ref = _storage.ref().child(emailTextController.text);
+      final url = await ref.getDownloadURL();
+      setState(() {
+        imageUrl = url;
+        isLoading = false; // End loading
+      });
+    } catch (e) {
+      print("Error fetching image URL: $e");
+      setState(() {
+        isLoading = false; // End loading even if there's an error
+      });
+    }
+    print(imageUrl) ;
+  }
+
+  Future<Uint8List> convertImageToUint8List(String assetPath) async {
+    // Create a File instance from the given file path
+    // Load the image as byte data from the asset bundle
+    ByteData data = await rootBundle.load(assetPath);
+
+    // Convert the byte data to Uint8List
+    return data.buffer.asUint8List();
+  }
+
+
+  void saveProfile() async {
+    print('saving profile');
+    //save profile
+    setState(() {
+      isLoading = true;
+    });
+    Uint8List? _image = await convertImageToUint8List('images/owl2.png');
+    String resp = await saveData(
+        file: _image!
+    );
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+  }
 
   void signUp() async {
+    saveProfile();
     showDialog(
       context: context,
       builder:(context) => const Center(

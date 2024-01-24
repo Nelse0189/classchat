@@ -17,7 +17,7 @@ class _ThemePageState extends State<ThemePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Theme', style: TextStyle(fontFamily: 'sfProBold'),),
+        title: Text('Theme', style: TextStyle(fontFamily: 'sfPro'),),
         centerTitle: true,
       ),
       body: ListView(

@@ -36,7 +36,7 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
 
   Future<String> getUsernameFromEmail(String userEmail) async {
     try {
-      DocumentSnapshot userDoc = await userCollections.doc(userEmail).get();
+      DocumentSnapshot userDoc = await userCollections.doc(userEmail!).get();
       if (userDoc.exists) {
         return userDoc['username'] as String; // Assuming 'username' field exists
       } else {
@@ -93,9 +93,10 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
     Widget build(BuildContext context) {
       return Scaffold(
         appBar: AppBar(
+          backgroundColor: theme,
         ),
           body: StreamBuilder<DocumentSnapshot>(
-            stream: FirebaseFirestore.instance.collection('Users').doc(selectedUser).snapshots(),
+            stream: FirebaseFirestore.instance.collection('Users').doc(selectedUser!).snapshots(),
             builder: (context, snapshot){
               if (snapshot.hasData) {
                 //get user data
@@ -104,7 +105,7 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                   children: [
                     const SizedBox(height: 50),
                     CircleAvatar(
-                      radius: 64,
+                      radius: 89,
                       backgroundImage: NetworkImage(
                         imageUrl != '' ? imageUrl : 'https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png',
                       ),
@@ -123,8 +124,8 @@ class _FriendProfilePageState extends State<FriendProfilePage> {
                       child: InkWell(
               onTap: () async {
               try {
-              String friendUsername = await getUsernameFromEmail(selectedUser);
-              userCollections.doc(currentUser.email).update({
+              String friendUsername = await getUsernameFromEmail(selectedUser!);
+              userCollections.doc(currentUser!.email!).update({
               'Friends': FieldValue.arrayUnion([friendUsername])
               });
               Navigator.push(

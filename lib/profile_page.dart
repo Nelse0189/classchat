@@ -132,7 +132,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: theme,
-          titleTextStyle: TextStyle(fontFamily: 'sfProBold', color: Colors.black, fontSize: 20),
+          titleTextStyle: TextStyle(fontFamily: 'sfProSemiBold', color: Colors.white, fontSize: 20),
           automaticallyImplyLeading: false,
           title: Text('ClassChat', style: TextStyle(fontFamily: 'sfProBold'),),
           centerTitle: true,
