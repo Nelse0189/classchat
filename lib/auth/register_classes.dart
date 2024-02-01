@@ -122,7 +122,7 @@ class _RegisterClasses extends State<RegisterClasses> {
                       List<Widget> subcategoryButtons = [];
                       for (int i = 0; i < snapshot.data!.docs.length; i++) {
                         DocumentSnapshot snap = snapshot.data!.docs[i];
-                        Color buttonColor = registeredClasses.contains(snap['name'].toString()) ? Colors.grey : Colors.black;
+                        Color buttonColor = registeredClasses.contains(snap['name'].toString()) ? Colors.grey.shade500 : Colors.blue;
                         subcategoryButtons.add(
                           ElevatedButton(
                             onPressed: () {

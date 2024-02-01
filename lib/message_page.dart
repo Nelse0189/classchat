@@ -97,6 +97,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
+        backgroundColor: theme,
         title: Text('ClassChat', style: TextStyle(fontFamily: 'sfProBold'),),
         centerTitle: true,
         leading: BackButton(
