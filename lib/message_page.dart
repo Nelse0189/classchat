@@ -98,7 +98,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         backgroundColor: theme,
-        title: Text('ClassChat', style: TextStyle(fontFamily: 'sfProBold'),),
+        title: Text('Unilo', style: TextStyle(fontFamily: 'sfProBold'),),
         centerTitle: true,
         leading: BackButton(
           onPressed: () {

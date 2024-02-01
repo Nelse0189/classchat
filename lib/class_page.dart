@@ -38,7 +38,7 @@ class _ClassPageState extends State<ClassPage> {
           iconTheme: IconThemeData(color: Colors.white),
           backgroundColor: theme,
           titleTextStyle: TextStyle(fontFamily: 'sfPro', color: Colors.white, fontSize: 20),
-          title: Text('ClassChat', style: TextStyle(fontFamily: 'SfProBold'),),
+          title: Text('Unilo', style: TextStyle(fontFamily: 'SfProBold'),),
           centerTitle: true,
           actions: [
             IconButton(

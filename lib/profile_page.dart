@@ -134,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
           backgroundColor: theme,
           titleTextStyle: TextStyle(fontFamily: 'sfProSemiBold', color: Colors.white, fontSize: 20),
           automaticallyImplyLeading: false,
-          title: Text('ClassChat', style: TextStyle(fontFamily: 'sfProBold'),),
+          title: Text('Unilo', style: TextStyle(fontFamily: 'sfProBold'),),
           centerTitle: true,
         ),
       backgroundColor: theme2,
