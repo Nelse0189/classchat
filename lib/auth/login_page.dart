@@ -1,5 +1,6 @@
 import 'package:classchat/auth/auth.dart';
 import 'package:classchat/auth/register_classes.dart';
+import 'package:classchat/auth/register_page.dart';
 import 'package:classchat/button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,12 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  void register() {
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>RegisterPage()));
+  }
+  void noSignIn() {
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>MyHomePage()));
+  }
   //user sign in
   void signIn() async {
     //show progress
@@ -54,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
         password: passwordTextController.text,
       );
       Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AuthPage(),),);
+        context, MaterialPageRoute(builder: (context) => MyHomePage(),),);
     } on FirebaseAuthException catch(e){
       Navigator.pop(context);
       displayMessage(e.code);
@@ -83,12 +90,12 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.lock,
-                  size: 100,
-                  color: Colors.black87,
+                Image.asset(
+                  'images/owl2.png',
+                  width: 200,
+                  height: 200,
                 ),
-                Text("Welcome back! You've been missed!", style: TextStyle(fontFamily: 'sfPro', fontSize: 17),),
+                Text("Welcome!", style: TextStyle(fontFamily: 'sfPro', fontSize: 17),),
                 const SizedBox(height: 25,),
 
                 MyTextField(controller: emailTextController, hintText: 'Email', obscureText: false),
@@ -109,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                     Text("Not a member?", style: TextStyle(fontFamily: 'sfPro', fontSize: 14),),
                     const SizedBox(width: 4,),
                     GestureDetector(
-                      onTap: widget.onTap,
+                      onTap: register,
                       child: const Text(
                         'Register Now!',
                         style: TextStyle(
@@ -117,16 +124,22 @@ class _LoginPageState extends State<LoginPage> {
                           color: Colors.blue,
                         ),
                       ),
+                    ),
+                    const SizedBox(width: 4,),
+                    Text(' | '),
+                    GestureDetector(
+                      onTap: noSignIn,
+                      child: const Text(
+                        "Continue anyways!",
+                        style: TextStyle(
+                          fontFamily: 'sfProBold',
+                          color: Colors.orange,
+                        ),
+                      ),
                     )
                   ],
                 )
-
-
-
-
-
               ],
-
             ),
           ),
         ),

@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -49,6 +43,16 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyAluZGOFUOVdaehgEhYVxPwEzw9edf6o1M',
+    appId: '1:938925896204:web:5ff20b767ee9e43fe67429',
+    messagingSenderId: '938925896204',
+    projectId: 'class-17dde',
+    authDomain: 'class-17dde.firebaseapp.com',
+    storageBucket: 'class-17dde.appspot.com',
+    measurementId: 'G-2ML6W34T49',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDglKs05oTWCWi_dJhDJmIjwkI4mGsgosk',
     appId: '1:938925896204:android:0c9c3325d1b7fbdde67429',
@@ -59,10 +63,19 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCfTRtMTqi449bx8lNBCFL48ypCXZCAtBo',
-    appId: '1:938925896204:ios:8d5a38af5831c662e67429',
+    appId: '1:938925896204:ios:155bd8c789c43fcde67429',
     messagingSenderId: '938925896204',
     projectId: 'class-17dde',
     storageBucket: 'class-17dde.appspot.com',
-    iosBundleId: 'com.example.classchat',
+    iosBundleId: 'com.nicholaselsener.unilo',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyCfTRtMTqi449bx8lNBCFL48ypCXZCAtBo',
+    appId: '1:938925896204:ios:95e63753ecfacd1ee67429',
+    messagingSenderId: '938925896204',
+    projectId: 'class-17dde',
+    storageBucket: 'class-17dde.appspot.com',
+    iosBundleId: 'com.example.classchat.RunnerTests',
   );
 }

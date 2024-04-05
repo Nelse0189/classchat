@@ -1,5 +1,6 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:classchat/auth/login_or_register.dart';
+import 'package:classchat/auth/login_page.dart';
 import 'package:classchat/auth/register_page.dart';
 import 'package:flutter/material.dart';
 import 'message_page.dart';
@@ -12,15 +13,38 @@ import 'firebase_options.dart';
 import 'package:flutter/services.dart';
 import 'class_page.dart';
 import 'auth/constants.dart';
-void main() async {
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
+import 'marketplace.dart';
+bool start = true;
+Future<void> main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
     statusBarColor: Colors.blue,
   ));
   WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = "pk_live_51OoXzAL1HYVwyPR6Sq0Jq1vJxO9oT1ItICvYKqNd0Wz26a3jfUiQfAbb7ePB89aqSFBud6vHPWpX6bXmyS2c2CPF00gwO0rw9T";
+  Stripe.merchantIdentifier = 'merchant.vend';
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  print('test');
   runApp(const MyApp());
+}
+
+Future<bool> checkClassRegistration() async {
+  try {
+    var email = FirebaseAuth.instance.currentUser?.email;
+    if (email != null) {
+      var snapshot = await FirebaseFirestore.instance.collection('Users').doc(email).get();
+      return snapshot.data()?['classRegistered'] ?? false;
+    }
+    return false;
+  } catch (e) {
+    print("Error fetching data: $e");
+    return false;
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -34,9 +58,10 @@ class MyApp extends StatelessWidget {
         statusBarColor: Colors.transparent,
         ),
         child: MaterialApp(
-        title: 'ClassChat',
+          debugShowCheckedModeBanner: false,
+          title: 'ClassChat',
         theme: ThemeData(
-          // This is the theme of your application.
+          // This is the theme of your applicaftion.
           //
           // TRY THIS: Try running your application with "flutter run". You'll see
           // the application has a purple toolbar. Then, without quitting the app,
@@ -79,7 +104,7 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title = 'ClassChat';
+  final String title = 'Skubble';
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -87,62 +112,80 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _currentIndex = 0;
+  late List<Widget> _pages;
+  late List<BottomNavigationBarItem> _navBarItems;
 
-  final List<Widget> _pages = [
-    ClassPage(),
-    SearchPage(),
-    ProfilePage(),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _setupNavigationItems();
+  }
+
+  void _setupNavigationItems() {
+    var user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      // User is not authenticated
+      _pages = [
+        MarketPlace(),
+        ClassPage(),
+      ];
+      _navBarItems = [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.shopping_bag),
+          label: 'Marketplace',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.class_),
+          label: 'Class',
+        ),
+      ];
+    } else {
+      // User is authenticated
+      _pages = [
+        ClassPage(),
+        MarketPlace(),
+        SearchPage(),
+        ProfilePage(),
+      ];
+      _navBarItems = [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Class',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.shopping_bag),
+          label: 'Marketplace',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.search),
+          label: 'Search',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+      ];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      //appBar: AppBar(
-      // TRY THIS: Try changing the color here to a specific color (to
-      // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-      // change color while the other colors stay the same.
-      //backgroundColor: Colors.redAccent.shade400,
-      // Here we take the value from the MyHomePage object that was created by
-      // the App.build method, and use it to set our appbar title.
-      //title: Text(
-      //widget.title,
-      //style: TextStyle(
-      //fontFamily: 'Roboto',
-      //fontSize: 21.0,
-      //),
-      //),
-      //centerTitle: true,
-      //),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: theme3,
+        unselectedItemColor: theme3,
+        backgroundColor: navBarColor,
         currentIndex: _currentIndex,
         onTap: (index) {
           setState(() {
             _currentIndex = index;
           });
         },
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.search),
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
+        items: _navBarItems,
       ),
-      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
+

@@ -1,4 +1,5 @@
 import 'package:classchat/auth/login_or_register.dart';
+import 'package:classchat/auth/login_page.dart';
 import 'package:classchat/auth/register_classes.dart';
 import 'package:classchat/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,40 +26,37 @@ class _AuthPageState extends State<AuthPage> {
   @override
   void initState() {
     super.initState();
-    _checkClassRegistration();
+    //_checkClassRegistration();
     getUserTheme();
   }
 
-  void _checkClassRegistration() async {
-    try {
-      var snapshot = await _firestore.collection('Users').doc(FirebaseAuth.instance.currentUser!.email).get();
-      setState(() {
-        isClassRegistered = snapshot.data()?['classRegistered'] ?? false;
-      });
-    } catch (e) {
-      // Handle any errors here
-      print("Error fetching data: $e");
-    }
-  }
+   /*Future<bool> _checkClassRegistration() async {
+     var snapshot = await _firestore.collection('Users').doc(
+         FirebaseAuth.instance.currentUser!.email).get();
+     isClassRegistered = snapshot.data()?['classRegistered'];
+     return isClassRegistered;
+   }*/
+
+
+
 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context,snapshot){
-          if (snapshot.hasData && isClassRegistered) {
-            return const MyHomePage();
-          }
-          else if (snapshot.hasData && !isClassRegistered) {
-            return RegisterClasses();
-          }
-          else{
-            return const LoginOrRegister();
-          }
-      }
-      )
-    );
+    return StreamBuilder(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, authSnapshot) {
+                if(authSnapshot.connectionState == ConnectionState.waiting){
+                  return Container(
+                      color: Colors.white70,
+                      child: Center(child: CircularProgressIndicator()));
+                } else if (authSnapshot.hasData) {
+                  return MyHomePage();
+                }
+                 else {
+                  print(authSnapshot);
+                  return LoginPage();
+                }
+              });
   }
 }

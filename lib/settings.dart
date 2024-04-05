@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:classchat/auth/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'auth/login_page.dart';
 class ThemePage extends StatefulWidget {
   const ThemePage({super.key});
 
@@ -13,6 +14,42 @@ class ThemePage extends StatefulWidget {
 
 class _ThemePageState extends State<ThemePage> {
   themeColor _themeChoice = themeColor.blue;
+
+  Future<void> deleteUserAccount() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      print("No user signed in.");
+      return;
+    }
+    final uid = user.email!;
+
+    try {
+      // Retrieve user document from the 'Users' collection
+      final userDocSnapshot = await FirebaseFirestore.instance.collection('Users').doc(uid).get();
+      if (userDocSnapshot.exists && userDocSnapshot.data()!.containsKey('userItems')) {
+        List<dynamic> userItems = userDocSnapshot.data()!['userItems'];
+
+        // Delete each item from the 'items' collection
+        for (var itemId in userItems) {
+          await FirebaseFirestore.instance.collection('items').doc(itemId).delete();
+        }
+      }
+
+      // Delete the user's document from 'Users' collection
+      await FirebaseFirestore.instance.collection('Users').doc(uid).delete();
+
+      // Delete the user's account
+      await user.delete();
+
+      // Navigate back to the sign-in screen
+      // Navigator.pushReplacementNamed(context, '/sign-in');
+    } catch (e) {
+      print("An error occurred while deleting the account and its data: $e");
+      // Handle the error appropriately
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -261,6 +298,36 @@ class _ThemePageState extends State<ThemePage> {
                 print(_themeChoice == themeColor.black);
               },
             ),
+          ),
+          SizedBox(height: 8,),
+          ListTile(
+            title: Text('Delete Account', style: TextStyle(color: Colors.red, fontFamily: 'sfPro')),
+            onTap: () {
+              // Confirm deletion with the user before proceeding
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text("Delete Account"),
+                    content: const Text("Are you sure you want to delete your account? This action cannot be undone."),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(), // Close the dialog
+                        child: const Text("Cancel"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          deleteUserAccount();
+                          Navigator.of(context).pop();// Close the dialog and proceed with deletion
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginPage()));
+                        },
+                        child: const Text("Delete"),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
           ),
         ],
       ),

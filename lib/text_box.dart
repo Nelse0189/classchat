@@ -31,13 +31,13 @@ class MyTextBox extends StatelessWidget {
             children: [
               Text(
                 sectionName,
-                style: TextStyle(color: Colors.black, fontFamily: 'sfPro', fontSize: 14),
+                style: TextStyle(color: Colors.white, fontFamily: 'sfPro', fontSize: 14),
               ),
               IconButton(onPressed: onPressed, icon: Icon(Icons.settings))
             ],
           ),
           // text
-          Text(text, style: TextStyle(color: Colors.black, fontFamily: 'sfPro', fontSize: 15,),),
+          Text(text, style: TextStyle(color: Colors.white, fontFamily: 'sfPro', fontSize: 15,),),
         ]
       ),
 
